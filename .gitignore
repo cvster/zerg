@@ -4,8 +4,8 @@
 
 
 #运行文件
-/runtime/
-/log/
+#在runtime和log文件夹下各自放一个.gitignore文件，也会生效，这样这两个文件夹存在，而其下面的文件都不加入仓库
+/log/*
 *.log
 
 #其他
