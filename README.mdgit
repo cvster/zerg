@@ -1,0 +1,7 @@
+application下面有两个模块，api和admin
+    api中，model提供数据库访问，集成了一些方法；
+    controller接收url，校验输入参数，然后调用model层的方法读写数据，并返回给调用者；
+    有时候业务比较复杂，controller不直接调用model层，而是调用service层，再由service层调用model层。
+
+    admin中，controller接收url，调用api模块中的controller层的方法处理业务；
+    并且提供view模板文件，将业务数据和view模板通过this-fecth()返回;
