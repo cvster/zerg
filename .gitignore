@@ -1,3 +1,7 @@
+#库文件
+/public/static/admin/hui/
+/thinkphp
+
 
 #运行文件
 /runtime/
@@ -5,11 +9,9 @@
 *.log
 
 #其他
-composer.json
 composer.lock
 .idea/
 
 #配置文件
-/application/extra/setting.php
-/application/extra/wx.php
+/application/extra/
 /application/database.php
