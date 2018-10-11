@@ -14,8 +14,16 @@ use app\api\controller\v1\Category as CategoryApi;
 use app\api\validate\Category as CategoryValidate;
 use app\api\model\Category as CategoryModel;
 
-class Category extends Controller
+class Category extends BaseAdminController
 {
+
+    private $categoryModel;
+
+    public function _initialize()
+    {
+        $this->categoryModel = new CategoryModel();
+        parent::_initialize();
+    }
 
     public function index()
     {
@@ -32,18 +40,50 @@ class Category extends Controller
 
     public function add()
     {
-
+        echo $this->fetch();
     }
 
-    public function edit()
+    //添加分类时在这里保存,表单提交的形式是post。现在只有一个name
+    public function addSave()
     {
-        print_r(input('post.'));
+        $data = input('post.');
+        if($data['name'] == '')
+            $this->error('分类名不能为空');
+
+        $category = new CategoryModel;
+        $category->name = $data['name'];
+        $res = $category->save();
+        $this->echoResultResponse($res);
     }
 
-    public function save()
+
+
+    public function edit($id,$name)
     {
-        return input('post.');
+        $category = ['name'=>$name, 'id'=>$id];
+        return $this->fetch('',['category'=>$category]);
     }
+
+    public function editSave()
+    {
+        $data = input('post.');//['id', 'name']
+        $validate = new CategoryValidate();
+        if(!$validate->scene('edit')->check($data)){
+            $this->error($validate->getError());
+        }
+        $category = CategoryModel::get($data['id']);
+
+        $category->name = $data['name'];
+        $res = $this->categoryModel->save($data,['id'=>$data['id']]);
+        $this->echoResultMsg($res);
+    }
+
+        public function delete($id)
+        {
+            $res = CategoryModel::destroy($id);
+            $this->echoResultResponse($res);
+        }
+
 
     public function listorder($id, $listorder)
     {

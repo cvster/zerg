@@ -21,3 +21,5 @@ function htmlStatus($status) {
     }
     return $str;
 }
+
+
