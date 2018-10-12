@@ -10,9 +10,10 @@ namespace app\admin\controller;
 
 
 use think\Controller;
-use app\api\controller\v1\Category as CategoryApi;
 use app\api\validate\Category as CategoryValidate;
 use app\api\model\Category as CategoryModel;
+use think\File;
+use think\Request;
 
 class Category extends BaseAdminController
 {
@@ -87,6 +88,7 @@ class Category extends BaseAdminController
 
     public function listorder($id, $listorder)
     {
+        $req=request();
         $categoryValidate = new CategoryValidate();
         $data = [ 'id'=>$id, 'listorder'=>$listorder ];
         if(!$categoryValidate->scene('listorder')->check($data)){
@@ -106,6 +108,19 @@ class Category extends BaseAdminController
             $this->result($_SERVER['HTTP_REFERER'], 1,'success');
         }else {
             $this->result($_SERVER['HTTP_REFERER'], 0, '更新失败');
+        }
+    }
+
+    public function imageUpload(){
+        $req=request();
+        $file = Request::instance()->file('file');
+        //将接收的图片放在一个目录下。
+        $info = $file->move('upload');
+        if($info || $info->getPathname()){
+            $pathInfo = '/'.$info->getPathname();
+            $this->result($pathInfo,1,'success');
+        }else{
+            $this->result(null,0,'upload error');
         }
     }
 }

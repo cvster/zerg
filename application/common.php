@@ -23,3 +23,11 @@ function htmlStatus($status) {
 }
 
 
+
+//function returnResult($code, $message='' , $data=[]) {
+//    return [
+//        'code' => intval($code),
+//        'message' => $message,
+//        'data' => $data,
+//    ];
+//}

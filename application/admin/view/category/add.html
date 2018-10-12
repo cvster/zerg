@@ -10,7 +10,14 @@
 			</div>
 		</div>
 		<div class="row cl">
-			<label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>分类图片：</label>
+			<div class="row cl">
+				<label class="form-label col-xs-4 col-sm-2">分类图片：</label>
+				<div class="formControls col-xs-8 col-sm-9">
+					<input id="file_upload"  type="file" multiple="true" >
+					<img style="display: none" id="upload_org_code_img" src="" width="150" height="150">
+					<input id="file_upload_image" name="logo" type="hidden" multiple="true" value="">
+				</div>
+			</div>
 
 		</div>
 		
@@ -24,5 +31,12 @@
 	</form>
 </div>
 </div>
+
+<script>
+	var SCOPE = {
+	    'image_upload_url': "{:url('category/imageUpload')}",
+	}
+</script>
+
 <!--包含头部文件-->
 {include file="public/footer" /}

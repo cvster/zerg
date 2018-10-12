@@ -19,6 +19,12 @@ class BaseAdminController extends Controller
 //        \think\Config::set('default_return_type', 'html');
     }
 
+    //用result返回数据时，设置默认返回为json，不然有时候会报错。
+    public function result($data, $code = 0, $msg = '', $type = '', array $header = [])
+    {
+        \think\Config::set('default_return_type', 'json');
+        parent::result($data, $code, $msg, $type, $header);
+    }
 
 
     //回复操作成功和操作失败的提示
