@@ -69,11 +69,6 @@ function Hui_admin_tab(obj){
 		alert("data-title属性不能为空");
 		return false;
 	}
-	//改成只显示一个选项卡
-	iframe_box.find(".show_iframe").hide().eq(bStopIndex).show().find("iframe").attr("src",href);
-	show_navLi.find('span').html(title);
-	return;
-	//屏蔽创建新选项卡
 	show_navLi.each(function() {
 		if($(this).find('span').attr("data-href")==href){
 			bStop=true;
@@ -82,6 +77,7 @@ function Hui_admin_tab(obj){
 		}
 	});
 	if(!bStop){
+
 		creatIframe(href,title);
 		min_titleList();
 	}
