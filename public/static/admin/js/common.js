@@ -44,3 +44,14 @@ $('.listorder input').blur(function() {
         }//result.code == 2 表示数据没有变化。
     },"json");
 });
+
+
+function sleep(numberMillis) {
+    var now = new Date();
+    var exitTime = now.getTime() + numberMillis;
+    while (true) {
+        now = new Date();
+        if (now.getTime() > exitTime)
+            return;
+    }
+}

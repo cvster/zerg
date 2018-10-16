@@ -54,7 +54,7 @@ class Category extends BaseAdminController
         $category = new CategoryModel;
         $category->name = $data['name'];
         $res = $category->save();
-        $this->echoResultResponse($res);
+        $this->result(null,$res?1:0);
     }
 
 
@@ -79,10 +79,11 @@ class Category extends BaseAdminController
         $this->echoResultMsg($res);
     }
 
-        public function delete($id)
+        public function delete()
         {
-            $res = CategoryModel::destroy($id);
-            $this->echoResultResponse($res);
+            $data = input('post.');
+            $res = CategoryModel::destroy($data['id']);
+            $this->result(null,$res?1:0);
         }
 
 

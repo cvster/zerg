@@ -4,7 +4,7 @@
 <nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span> 商品管理 <span class="c-gray en">&gt;</span> 分类管理 <a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a></nav>
 <div class="page-container">
 	
-	<div class="cl pd-5 bg-1 bk-gray mt-20"> <span class="l"> <a class="btn btn-primary radius" onclick="o2o_s_edit('添加商品分类','{:url('Category/add')}','','600')" href="javascript:;"><i class="Hui-iconfont">&#xe600;</i> 添加分类</a></span> <span class="r"></span> </div>
+	<div class="cl pd-5 bg-1 bk-gray mt-20"> <span class="l"> <a class="btn btn-primary radius" onclick="openAddLayer()" href="javascript:;"><i class="Hui-iconfont">&#xe600;</i> 添加分类</a></span> <span class="r"></span> </div>
 	<div class="mt-20">
 		<table class="table table-border table-bordered table-bg table-hover table-sort">
 			<thead>
@@ -28,7 +28,7 @@
 						<td class="td-manage">
 							<a style="text-decoration:none" class="ml-5" onClick="o2o_s_edit('编辑','{:url('category/edit',['id'=>$vo.id, 'name'=>$vo.name])}','',300)" 								href="javascript:;" title="编辑"><i class="Hui-iconfont">&#xe6df;</i></a>
 
-							<a style="text-decoration:none" class="ml-5" onClick="o2o_del('{:url('category/delete', ['id'=>$vo.id])}')" href="javascript:;" title="删除">
+							<a style="text-decoration:none" class="ml-5" onClick="deleteCategory({$vo.id})" href="javascript:;" title="删除">
 								<i class="Hui-iconfont">&#xe6e2;</i></a>
 						</td>
 					</tr>
@@ -47,6 +47,48 @@
 	};
 </script>
 {include file="public/footer" /}
+
+<script>
+    function openAddLayer(){
+        layer.open({
+            type: 2,
+            area: ['800px', '500px'],
+            fix: false, //不固定
+            maxmin: true,
+            shade:0.4,
+            title: "添加商品分类",
+            content: "{:url('Category/add')}",
+//            end: function () {
+//                location.reload();
+//            },
+        });
+    }
+
+    function deleteCategory(categoryId) {
+        layer.confirm('确认要删除吗？',function(index){
+            $.ajax({
+                type: "POST",//方法类型
+//                dataType: "json",//预期服务器返回的数据类型
+                url: "{:url('Category/delete')}" ,
+                data: { id: categoryId},
+                success: function (result) {
+//                    console.log(result);//打印服务端返回的数据(调试用)
+                    if (result.code == 1) {
+                        parent.parent.toastr.success("删除成功");
+                        window.location.reload();
+                    }
+                    else{
+                        toastr.success("删除失败","msg:");
+					}
+                },
+                error : function() {
+                    toastr.error("服务器异常，保存失败");
+                }
+            });
+            layer.close(index);
+        });
+    }
+</script>
 
 
 </body>
