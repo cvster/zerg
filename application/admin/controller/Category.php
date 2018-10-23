@@ -14,6 +14,8 @@ use app\api\validate\Category as CategoryValidate;
 use app\api\model\Category as CategoryModel;
 use think\File;
 use think\Request;
+use app\api\model\Image as ImageModel;
+use think\Db;
 
 class Category extends BaseAdminController
 {
@@ -47,14 +49,32 @@ class Category extends BaseAdminController
     //添加分类时在这里保存,表单提交的形式是post。现在只有一个name
     public function addSave()
     {
+        //todo: 加validate
         $data = input('post.');
         if($data['name'] == '')
             $this->error('分类名不能为空');
 
-        $category = new CategoryModel;
-        $category->name = $data['name'];
-        $res = $category->save();
-        $this->result(null,$res?1:0);
+        Db::startTrans();
+        try{
+            $category = new CategoryModel;
+            $category->name = $data['name'];
+            $category->topic_img_id = $data['imgId'];
+            $res = $category->save();
+            if($res){
+                $image = ImageModel::get($data['imgId']);
+                $imgId = $image->id;
+                $image->useage_comment = 'image for category id = '.$imgId;
+                $res2=$image->save();
+            }
+        }
+        catch (\Exception $exception){
+            //错误信息
+            $this->result(null,0,'数据存储错误');
+            Db::rollback();
+            //应该加入log
+        }
+
+        $this->result(null,$res&&$res2 ? 1:0);
     }
 
 
@@ -82,7 +102,7 @@ class Category extends BaseAdminController
         public function delete()
         {
             $data = input('post.');
-            $res = CategoryModel::destroy($data['id']);
+            $res = CategoryModel::destroy(intval($data['id']));
             $this->result(null,$res?1:0);
         }
 
@@ -114,14 +134,34 @@ class Category extends BaseAdminController
 
     public function imageUpload(){
         $req=request();
+        $data=input('post.');
         $file = Request::instance()->file('file');
         //将接收的图片放在一个目录下。
-        $info = $file->move('upload');
+        $info = $file->move('images');
         if($info || $info->getPathname()){
-            $pathInfo = '/'.$info->getPathname();
-            $this->result($pathInfo,1,'success');
+            $pathInfo = $info->getPathname();
+            $pathInfo = str_replace('\\', '/',  $pathInfo);//在windows下调试的时候，获取的pathname是 \ ，但是最后是要部署到linux上的，是 / ，而windows上两个都行，所有换成 /
+            $pathInfo = '/'.$pathInfo;
+
+            //将img信息存入数据库
+            $image = new ImageModel;
+            $image->url = $pathInfo;
+            $image->from = 1;//来自本地
+            $image->useage_comment = 'useless';
+
+            $res = $image->save();
+            if($res)
+                return json([
+                    'imgUrl'=>$pathInfo,
+                    'imgId'=>$image->id,
+                    'code'=>1,
+                    'msg'=>'success'
+                ]);
         }else{
-            $this->result(null,0,'upload error');
+            return json([
+                'code'=>1,
+                'msg'=>'upload error'
+            ]);
         }
     }
 }

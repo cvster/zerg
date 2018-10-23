@@ -2,66 +2,114 @@
 {include file="public/header" /}
 <body>
 <div class="page-container">
-	<form class="form form-horizontal form-o2o-add" id="form-add" method="post" action="##" onsubmit="return false">
+
+	<form id="formAdd" class="form form-horizontal form-o2o-add" method="post" action="##" onsubmit="return false">
+
 		<div class="row cl">
 			<label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>商品分类名称：</label>
 			<div class="formControls col-xs-8 col-sm-9">
-				<input type="text" class="input-text" value="" placeholder="" id="name" name="name">
+				<input type="text" class="input-text" value="" placeholder="" id="name" name="name" required>
 			</div>
 		</div>
+
 		<div class="row cl"><!--上传图片-->
 			<div class="row cl">
 				<label class="form-label col-xs-4 col-sm-2">分类图片：</label>
 				<div class="formControls col-xs-8 col-sm-9">
-					<input id="file_upload"  type="file" multiple="true" ><!--id="file_upload",在image.js中绑定了文件上传的方法-->
-					<img style="display: none" id="upload_org_code_img" src="" width="150" height="150">
+
+					<input id="file_upload"  type="file" name="file_upload"><!--id="file_upload",在image.js中绑定了文件上传的方法-->
+
+					<img style="display: none" id="upload_img_show" src="" width="150" height="150"><!-- upload_org_code_img,在image.js中设置其显示图片  -->
+
 					<input id="file_upload_image" name="logo" type="hidden" multiple="true" value="">
 				</div>
 			</div>
-
 		</div>
+
+		<!--   -->
+
+		<input type="hidden" id="imgId" name="imgId"><!--隐藏的input，在image,js中，上传成功时服务器返回图片路径，然后将路径赋值给改input--->
 
 		<div class="row cl">
 			<div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-2">
-				<button  type="button" class="btn btn-primary radius" value="保存" onclick="submitAdd()"><i class="Hui-iconfont">&#xe632;</i> 保存</button>
-				
-				<button onClick="layer_close();" class="btn btn-default radius" type="button">&nbsp;&nbsp;取消&nbsp;&nbsp;</button>
+
+				<!--<div><input id="submitbtn" type="submit" value="提交" > </div>-->
+
+				<button  type="submit" class="btn btn-primary radius" value="保存"><i class="Hui-iconfont">&#xe632;</i> 保存</button>
+
+				<button onClick="submitCancel();" class="btn btn-default radius" type="button">&nbsp;&nbsp;取消&nbsp;&nbsp;</button>
+
 			</div>
 		</div>
 	</form>
 </div>
 </div>
 
+
+
 <script>
 	var SCOPE = {
 	    'image_upload_url': "{:url('category/imageUpload')}",
-		'uploadify_single': true,
-	}
+		'uploadify_multi': false,
+        'lastImageUrl': "",
+        'currentImageUrl': "",
+	};
+</script>
+{include file="public/footer" /}
 
-    function submitAdd() {
-        $.ajax({
-            //几个参数需要注意一下
-            type: "POST",//方法类型
-            dataType: "json",//预期服务器返回的数据类型
+
+
+<script>
+
+    $(document).ready(function() {
+
+        //ajaxSubmit参数设置
+        var formOptions = {
+            target:        '#output1',   // 用服务器返回的数据 更新 id为output1的内容.
             url: "{:url('Category/addSave')}" ,//url
-            data: $('#form-add').serialize(),
-            success: function (result) {
-//                console.log(result);//打印服务端返回的数据(调试用)
+            type: "POST",			//方法类型
+            dataType: "json",      // 'xml', 'script', or 'json' (接受服务端返回的类型.)
+            resetForm: true,        // 成功提交后，重置所有的表单元素的值.
+            timeout:   3000,
+            success:       function (result) {
+                console.log(result);//打印服务端返回的数据(调试用)
                 if (result.code == 1) {
                     parent.parent.toastr.success("保存成功");
                     parent.location.reload();
                 }
+                if (result.code == 0) {
+                    toastr.error(result.msg);
+                }
             },
             error : function() {
                 toastr.error("服务器异常，保存失败");
+            },
+        };
+
+
+        //这里使用jquery.validate对表单验证，并在里面进行ajaxSubmit提交
+        $("#formAdd").validate({
+            submitHandler: function(form)
+            {
+                $(form).ajaxSubmit(formOptions);
+                // 为了防止普通浏览器进行表单提交和产生页面导航（防止页面刷新？）返回false
+                return false;
             }
-        });
+        })
+
+    });
+
+
+
+
+    function submitCancel() {
+        layer_close();
     }
 
 </script>
 
 
-{include file="public/footer" /}
+
 
 
 </body>

@@ -1,10 +1,12 @@
 
 <script type="text/javascript" src="__STATIC__/admin/hui3.1/lib/jquery/1.9.1/jquery.min.js"></script>
+<!-- 将jquery.form包含在hui.js前面，可以覆盖下面hui.js中的错误的ajaxform方法  -->
+<!--{load href="__STATIC__/admin/jquery.form.js" /}-->
 <script type="text/javascript" src="__STATIC__/admin/hui3.1/lib/layer/2.4/layer.js"></script>
 <script type="text/javascript" src="__STATIC__/admin/hui3.1/static/h-ui/js/H-ui.min.js"></script>
 <script type="text/javascript" src="__STATIC__/admin/hui3.1/static/h-ui.admin/js/H-ui.admin.js"></script> <!--/_footer 作为公共模版分离出去-->
 
-
+<!--   -->
 <!--我添加的js文件-->
 <script src="__STATIC__/admin/toastr/toastr.min.js"></script>
 
@@ -29,5 +31,7 @@
 {load href="__STATIC__/admin/js/common.js" /}
 {load href="__STATIC__/admin/uploadify/jquery.uploadify.min.js" /}
 {load href="__STATIC__/admin/js/image.js" /}
+{load href="__STATIC__/admin/validate/jquery.validate.min.js" /}
+{load href="__STATIC__/admin/validate/localization/messages_zh.js" /}
 <!--我添加的js文件 结束-->
 

@@ -35,7 +35,7 @@ class Category extends BaseModel
     //$num,每页显示的数量
     public function getCategoriesByPage($num)
     {
-        $categories = self::with('products')
+        $categories = self::with('products,img')
             ->order('order')
             ->paginate($num);
         return $categories;

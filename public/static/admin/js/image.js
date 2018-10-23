@@ -1,26 +1,30 @@
 
 $(function() {
     $("#file_upload").uploadify({
-        'swf'              : "/static/admin/uploadify/uploadify.swf",       //'swf'              : SCOPE.uploadify_swf,
-        'uploader'        : SCOPE.image_upload_url,     //'uploader'        : SCOPE.image_upload_url,
-
-        'buttonText'      : '图片上传',
-        'fileTypeDesc'    : 'Image files',
-        'fileObjName'     : 'file',
-        'fileTypeExts'    : '*.gif; *.jpg; *.jpge; *.png',
-        'onUploadSuccess' : function(file, data, response) {
-            console.log('file ');
+        'swf'                : "/static/admin/uploadify/uploadify.swf",
+        // 'formData'          :  $("form").serialize(),
+        'uploader'          : SCOPE.image_upload_url,
+        'multi'              : SCOPE.uploadify_multi,
+        'buttonText'        : '图片上传',
+        'fileTypeDesc'      : 'Image files',
+        'fileObjName'       : 'file',
+        'fileTypeExts'      : '*.gif; *.jpg; *.jpge; *.png',
+        'onUploadSuccess'   : function(file, data, response) {
+            console.log('1-file: ');
             console.log(file);
-            console.log('data ');
+            console.log('2-data: ');
             console.log(data);
-            console.log('response ');
+            console.log('3-response: ');
             console.log(response);
             if(response)
             {
                 var dataParse = JSON.parse(data);
-                $("#upload_org_code_img").attr('src',dataParse.data);
-                console.log(dataParse.data);
-                $("#upload_org_code_img").show();
+                var imageUrl = dataParse.imgUrl;
+
+                $("#upload_img_show").attr('src',imageUrl);//显示图片
+                $("#imgId").attr('value',dataParse.imgId);//将图片id存入form表单的一个隐藏input中,提交时传给服务器
+
+                $("#upload_img_show").show();
                 toastr.success('上传完成');
             }
             else

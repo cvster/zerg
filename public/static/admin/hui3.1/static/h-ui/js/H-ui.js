@@ -1052,7 +1052,7 @@ function stopDefault(e) {
 			return this;
 		}
 
-		return this.ajaxFormUnbind().on('submit.form-plugin', options, doAjaxSubmit).on('click.form-plugin', options, captureSubmittingElement);
+		return this.ajaxFormUnbind().bind('submit.form-plugin', options, doAjaxSubmit).bind('click.form-plugin', options, captureSubmittingElement);
 	};
 
 	// private event handlers
