@@ -3,26 +3,30 @@
 <body>
 <div class="page-container">
 
-	<form id="formAdd" class="form form-horizontal form-o2o-add" method="post" action="##" onsubmit="return false">
+	<form id="formAdd" class="form form-horizontal form-o2o-add" method="post" action="##" onsubmit="return false" enctype="multipart/form-data">
 
 		<div class="row cl">
-			<label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>商品分类名称：</label>
-			<div class="formControls col-xs-8 col-sm-9">
+			<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>商品分类名称：</label>
+			<div class="formControls col-xs-8 col-sm-8">
 				<input type="text" class="input-text" value="" placeholder="" id="name" name="name" required>
 			</div>
 		</div>
 
 		<div class="row cl"><!--上传图片-->
 			<div class="row cl">
-				<label class="form-label col-xs-4 col-sm-2">分类图片：</label>
-				<div class="formControls col-xs-8 col-sm-9">
+				<label class="form-label col-xs-4 col-sm-3">分类图片：</label>
 
-					<input id="file_upload"  type="file" name="file_upload"><!--id="file_upload",在image.js中绑定了文件上传的方法-->
+				<!--<div class="formControls col-xs-8 col-sm-9">-->
+					<!--<input id="file_upload"  type="file" name="file_upload">&lt;!&ndash;id="file_upload",在image.js中绑定了文件上传的方法&ndash;&gt;-->
+					<!--<img style="display: none" id="upload_img_show" src="" width="150" height="150">&lt;!&ndash; upload_org_code_img,在image.js中设置其显示图片  &ndash;&gt;-->
+					<!--<input id="file_upload_image" name="logo" type="hidden" multiple="true" value="">-->
+				<!--</div>-->
 
-					<img style="display: none" id="upload_img_show" src="" width="150" height="150"><!-- upload_org_code_img,在image.js中设置其显示图片  -->
-
-					<input id="file_upload_image" name="logo" type="hidden" multiple="true" value="">
+				<div class="btn-upload">
+					<a href="javascript:void(0);" class="btn btn-primary radius btn-upload"><i class="Hui-iconfont">&#xe642;</i> 选择图片</a>
+					<input id="file" type="file" name="file" onchange="changePic(this)" class="input-file" required>	<!-- class="input-file"-->
 				</div>
+
 			</div>
 		</div>
 
@@ -35,9 +39,15 @@
 
 				<!--<div><input id="submitbtn" type="submit" value="提交" > </div>-->
 
-				<button  type="submit" class="btn btn-primary radius" value="保存"><i class="Hui-iconfont">&#xe632;</i> 保存</button>
+				<div ><img src="/static/admin/image/chooseImage2.jpg" id="showImage" width="200" height="200" class="radius"></div>
 
-				<button onClick="submitCancel();" class="btn btn-default radius" type="button">&nbsp;&nbsp;取消&nbsp;&nbsp;</button>
+				<div class="row cl">
+					<div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-2">
+						<button  type="submit" class="btn btn-primary radius" value="保存"><i class="Hui-iconfont">&#xe632;</i> 保存 </button>
+						<span>&nbsp &nbsp &nbsp &nbsp &nbsp</span>
+						<button onClick="submitCancel();" class="btn btn-default radius" type="button">&nbsp;&nbsp;取消&nbsp;&nbsp;</button>
+					</div>
+				</div>
 
 			</div>
 		</div>
@@ -78,7 +88,7 @@
                     parent.location.reload();
                 }
                 if (result.code == 0) {
-                    toastr.error(result.msg);
+                    layer.alert('警告：'+result.msg);
                 }
             },
             error : function() {
@@ -99,7 +109,25 @@
 
     });
 
-
+    //预览图片
+    function changePic(obj) {
+        console.log(obj.files[0]);//这里可以获取上传文件的name
+        var newSrc=getObjectURL(obj.files[0]);
+        document.getElementById('showImage').src=newSrc;
+    }
+    //建立一個可存取到該file的url
+    function getObjectURL(file) {
+        var url = null ;
+        // 下面函数执行的效果是一样的，只是需要针对不同的浏览器执行不同的 js 函数而已
+        if (window.createObjectURL!=undefined) { // basic
+            url = window.createObjectURL(file) ;
+        } else if (window.URL!=undefined) { // mozilla(firefox)
+            url = window.URL.createObjectURL(file) ;
+        } else if (window.webkitURL!=undefined) { // webkit or chrome
+            url = window.webkitURL.createObjectURL(file) ;
+        }
+        return url ;
+    }
 
 
     function submitCancel() {

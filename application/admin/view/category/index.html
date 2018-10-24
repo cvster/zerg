@@ -25,7 +25,7 @@
 						<td class="text-c listorder"><input  size="4" attr-id="{$vo.id}" name="listorder" value="{$vo.order}"/></td><!--排序序号，在common.js中设置了 .listorder input的 jquery选择器，当失去焦点时会向服务器发送post数据，并在回调函数中响应-->
 						<td>{$vo.name}</td><!--分类-->
 						<!--<td class="td-status"><a href="" title="点击修改状态">{$vo.img.url}</a></td>状态-->
-						<td><img  src="{$vo.img.url}" class="img-responsive" alt="响应式图片"></td><!--图片-->
+						<td><img  src="{$vo.img.url}" height="150" width="200"></td><!--图片-->
 						<td class="td-manage">
 							<a style="text-decoration:none" class="ml-5" onClick="o2o_s_edit('编辑','{:url('category/edit',['id'=>$vo.id, 'name'=>$vo.name])}','',300)" 								href="javascript:;" title="编辑"><i class="Hui-iconfont">&#xe6df;</i></a>
 

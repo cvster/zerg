@@ -24,10 +24,10 @@ function htmlStatus($status) {
 
 
 
-//function returnResult($code, $message='' , $data=[]) {
-//    return [
-//        'code' => intval($code),
-//        'message' => $message,
-//        'data' => $data,
-//    ];
-//}
+function jsonResult($code, $msg='' , $data=[]) {
+    return [
+        'code' => intval($code),
+        'msg' => $msg,
+        'data' => $data,
+    ];
+}

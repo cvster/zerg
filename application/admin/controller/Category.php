@@ -46,36 +46,74 @@ class Category extends BaseAdminController
         echo $this->fetch();
     }
 
+//    //添加分类时在这里保存,表单提交的形式是post。现在只有一个name
+//    public function addSave()
+//    {
+//        //todo: 加validate
+//        $data = input('post.');
+//        if($data['name'] == '')
+//            $this->error('分类名不能为空');
+//
+//        Db::startTrans();
+//        try{
+//            $category = new CategoryModel;
+//            $category->name = $data['name'];
+//            $category->topic_img_id = $data['imgId'];
+//            $res = $category->save();
+//            if($res){
+//                $image = ImageModel::get($data['imgId']);
+//                $imgId = $image->id;
+//                $image->useage_comment = 'image for category id = '.$imgId;
+//                $res2=$image->save();
+//            }
+//        }
+//        catch (\Exception $exception){
+//            //错误信息
+//            $this->result(null,0,'数据存储错误');
+//            Db::rollback();
+//            //应该加入log
+//        }
+//
+//        $this->result(null,$res&&$res2 ? 1:0);
+//    }
+
+
     //添加分类时在这里保存,表单提交的形式是post。现在只有一个name
     public function addSave()
     {
-        //todo: 加validate
+        //todo: validate，待完善
         $data = input('post.');
         if($data['name'] == '')
             $this->error('分类名不能为空');
 
-        Db::startTrans();
-        try{
-            $category = new CategoryModel;
-            $category->name = $data['name'];
-            $category->topic_img_id = $data['imgId'];
-            $res = $category->save();
-            if($res){
-                $image = ImageModel::get($data['imgId']);
-                $imgId = $image->id;
-                $image->useage_comment = 'image for category id = '.$imgId;
-                $res2=$image->save();
-            }
-        }
-        catch (\Exception $exception){
-            //错误信息
-            $this->result(null,0,'数据存储错误');
-            Db::rollback();
-            //应该加入log
-        }
+        //将接收的图片放在/public/images目录下。
+        $file = Request::instance()->file('file');
+        $info = $file->move('images');
+        if(!$info)  return jsonResult(0,'文件上传存储失败');
+        $pathInfo = $info->getPathname();
+        $pathInfo = '/'.str_replace('\\', '/',  $pathInfo);//在windows下调试的时候，获取的pathname是 \ ，但是最后是要部署到linux上的，是 / ，而windows上两个都行，所有换成 /
 
-        $this->result(null,$res&&$res2 ? 1:0);
+        //将img信息存入数据库
+        $image = new ImageModel;
+        $image->url = $pathInfo;
+        $image->from = 1;//来自本地
+        $image->useage_comment = 'useless';
+        $res = $image->save();
+        if(!$res)  return jsonResult(0,'图像路径存入数据库时产生异常');
+
+        //将category信息存入数据库
+        $category = new CategoryModel;
+        $category->name = $data['name'];
+        $category->topic_img_id = $image->id;
+        $res = $category->save();
+        if(!$res)  return jsonResult(0,'分类信息存入数据库时产生异常');
+
+        $image->useage_comment = 'image for category id = '.($category->id);
+        $image->save();
+
+        return jsonResult(1,'保存成功');
     }
+
 
 
 
