@@ -46,37 +46,6 @@ class Category extends BaseAdminController
         echo $this->fetch();
     }
 
-//    //添加分类时在这里保存,表单提交的形式是post。现在只有一个name
-//    public function addSave()
-//    {
-//        //todo: 加validate
-//        $data = input('post.');
-//        if($data['name'] == '')
-//            $this->error('分类名不能为空');
-//
-//        Db::startTrans();
-//        try{
-//            $category = new CategoryModel;
-//            $category->name = $data['name'];
-//            $category->topic_img_id = $data['imgId'];
-//            $res = $category->save();
-//            if($res){
-//                $image = ImageModel::get($data['imgId']);
-//                $imgId = $image->id;
-//                $image->useage_comment = 'image for category id = '.$imgId;
-//                $res2=$image->save();
-//            }
-//        }
-//        catch (\Exception $exception){
-//            //错误信息
-//            $this->result(null,0,'数据存储错误');
-//            Db::rollback();
-//            //应该加入log
-//        }
-//
-//        $this->result(null,$res&&$res2 ? 1:0);
-//    }
-
 
     //添加分类时在这里保存,表单提交的形式是post。现在只有一个name
     public function addSave()
@@ -139,9 +108,23 @@ class Category extends BaseAdminController
 
         public function delete()
         {
+            //todo:校验
             $data = input('post.');
-            $res = CategoryModel::destroy(intval($data['id']));
-            $this->result(null,$res?1:0);
+            $id = $data['id'];
+            $category = CategoryModel::get($id);
+            $image = ImageModel::get($category->topic_img_id);
+            $imagePath = $_SERVER['DOCUMENT_ROOT'].$image->url;
+
+            $res = CategoryModel::destroy(intval($category->id));
+            if(!$res)  return jsonResult(0,'删除失败');
+
+            try{
+                unlink($imagePath);
+            }catch (\Exception $e){
+                return jsonResult(0,'分类删除成功,但是分类图片删除失败');
+            }
+
+            return jsonResult(1,'删除成功');
         }
 
 
@@ -170,36 +153,4 @@ class Category extends BaseAdminController
         }
     }
 
-    public function imageUpload(){
-        $req=request();
-        $data=input('post.');
-        $file = Request::instance()->file('file');
-        //将接收的图片放在一个目录下。
-        $info = $file->move('images');
-        if($info || $info->getPathname()){
-            $pathInfo = $info->getPathname();
-            $pathInfo = str_replace('\\', '/',  $pathInfo);//在windows下调试的时候，获取的pathname是 \ ，但是最后是要部署到linux上的，是 / ，而windows上两个都行，所有换成 /
-            $pathInfo = '/'.$pathInfo;
-
-            //将img信息存入数据库
-            $image = new ImageModel;
-            $image->url = $pathInfo;
-            $image->from = 1;//来自本地
-            $image->useage_comment = 'useless';
-
-            $res = $image->save();
-            if($res)
-                return json([
-                    'imgUrl'=>$pathInfo,
-                    'imgId'=>$image->id,
-                    'code'=>1,
-                    'msg'=>'success'
-                ]);
-        }else{
-            return json([
-                'code'=>1,
-                'msg'=>'upload error'
-            ]);
-        }
-    }
 }

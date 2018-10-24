@@ -25,6 +25,11 @@ class BaseModel extends Model
     
     protected function  prefixImgUrl($value, $data){
         $finalUrl = $value;
+        $module_name=request()->module();
+        if($module_name == 'admin')
+            return $finalUrl;
+
+
         if($data['from'] == 1){
             $finalUrl = config('setting.img_prefix').$value;
         }
