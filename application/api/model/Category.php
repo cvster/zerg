@@ -40,4 +40,15 @@ class Category extends BaseModel
             ->paginate($num);
         return $categories;
     }
+
+    public function mySave($name=null, $topic_img_id=null){
+        //不能用$this->name = $name; $this->save(),因为这样$this->name改变的是category类的name
+
+        if($name != null)
+            $data['name'] = $name;
+        if($topic_img_id != null)
+            $data['topic_img_id']= $topic_img_id;
+
+        return $this->save($data);
+    }
 }

@@ -24,10 +24,32 @@ function htmlStatus($status) {
 
 
 
-function jsonResult($code, $msg='' , $data=[]) {
+function jsonResult($code, $msg='', $data=[]) {
     return [
         'code' => intval($code),
         'msg' => $msg,
         'data' => $data,
     ];
+}
+
+function resResult($res, $successMsg='' , $errorMsg='', $data=[]) {
+    return [
+        'code' => $res? 1:0,
+        'msg' => $res? $successMsg:$errorMsg,
+        'data' => $data,
+    ];
+}
+
+/**
+ * @param $deleteFileUrl, 要删除的文件路径，相对于public目录来说的。因为$_SERVER['DOCUMENT_ROOT']是public路径
+ * @return bool, 删除成功或者失败
+ */
+function tryDelete($deleteFileUrl){
+    $deleteImagePath = $_SERVER['DOCUMENT_ROOT'].$deleteFileUrl;
+    try{
+        unlink($deleteImagePath);
+    }catch (\Exception $e){
+        return false;
+    }
+    return true;
 }
