@@ -13,15 +13,15 @@ use think\Controller;
 
 class Product extends Controller
 {
-//    public function index()
-//    {
-//        echo $this->fetch();
-//    }
-
-    public function add()
+    public function index()
     {
         echo $this->fetch();
     }
+
+//    public function add()
+//    {
+//        echo $this->fetch();
+//    }
 
 //    public function save()
 //    {

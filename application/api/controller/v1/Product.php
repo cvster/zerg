@@ -82,10 +82,10 @@ class Product extends Controller
         (new IDMustBePositiveInt())->goCheck();
         $products = ProductModel::getProductsByCategoryID(
             $id, false);
-        if ($products->isEmpty())
-        {
-            throw new ThemeException();
-        }
+//        if ($products->isEmpty())//category下没有商品也没关系，返回200后客户端可以继续正常的处理流程
+//        {
+//            throw new ThemeException();
+//        }
         $data = $products
             ->hidden(['summary'])
             ->toArray();

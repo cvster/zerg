@@ -41,8 +41,7 @@ class Product extends BaseModel
     public static function getProductsByCategoryID(
         $categoryID, $paginate = true, $page = 1, $size = 30)
     {
-        $query = self::
-        where('category_id', '=', $categoryID);
+        $query = self::where('category_id', '=', $categoryID);
         if (!$paginate)
         {
             return $query->select();
