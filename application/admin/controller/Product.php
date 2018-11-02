@@ -10,12 +10,16 @@ namespace app\admin\controller;
 
 
 use think\Controller;
+use app\api\model\Product as ProductModel;
 
 class Product extends Controller
 {
     public function index()
     {
-        echo $this->fetch();
+//        $productsModel = new ProductModel();
+//        $products= $productsModel->getProductsByPage(15);
+//        echo $this->fetch('',['products'=>$products]);
+        echo 'aa';
     }
 
 //    public function add()

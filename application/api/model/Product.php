@@ -56,6 +56,16 @@ class Product extends BaseModel
         }
     }
 
+    //$num,每页显示的数量 for admin, 分页显示，不是简洁模式 todo: 复制了还没怎么改。
+    public function getProductsByPage($num)
+    {
+//        $products = self::with('products,img')
+//            ->order('order')
+//            ->paginate($num);
+        $products = self::paginate($num);
+        return $products;
+    }
+
     /**
      * 获取商品详情
      * @param $id
