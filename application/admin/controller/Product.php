@@ -19,7 +19,7 @@ class Product extends Controller
 //        $productsModel = new ProductModel();
 //        $products= $productsModel->getProductsByPage(15);
 //        echo $this->fetch('',['products'=>$products]);
-        echo 'aa';
+        echo '重启了php之后又可以打开了';
     }
 
 //    public function add()
