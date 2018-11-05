@@ -8,7 +8,7 @@ class Product extends BaseModel
 {
     protected $autoWriteTimestamp = 'datetime';
     protected $hidden = [
-        'delete_time', 'main_img_id', 'pivot', 'from', 'category_id',
+        'delete_time', 'main_img_id', 'pivot', 'from',
         'create_time', 'update_time'];
 
     /**
@@ -17,6 +17,11 @@ class Product extends BaseModel
     public function imgs()
     {
         return $this->hasMany('ProductImage', 'product_id', 'id');
+    }
+
+    public function category()
+    {
+        return $this->belongsTo('Category', 'category_id', 'id');
     }
 
     public function getMainImgUrlAttr($value, $data)
@@ -62,7 +67,9 @@ class Product extends BaseModel
 //        $products = self::with('products,img')
 //            ->order('order')
 //            ->paginate($num);
-        $products = self::paginate($num);
+        $products = self::with('category')
+            ->order('listorder')
+            ->paginate($num);
         return $products;
     }
 

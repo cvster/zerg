@@ -65,7 +65,7 @@ class ExceptionHandler extends Handle
         Log::init([
             'type'  =>  'File',
             'path'  =>  LOG_PATH,
-            'level' => ['error']
+            'level' => ['sql']
         ]);
 //        Log::record($e->getTraceAsString());
         Log::record($e->getMessage(),'error');

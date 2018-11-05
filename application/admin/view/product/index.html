@@ -1,7 +1,7 @@
 <!--包含头部文件-->
 {include file="public/header" /}
 <body>
-<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span> 商品管理 <span class="c-gray en">&gt;</span> 分类管理 <a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a></nav>
+<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span> 商城管理 <span class="c-gray en">&gt;</span> 商品管理 <a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a></nav>
 <div class="page-container">
 	
 	<div class="cl pd-5 bg-1 bk-gray mt-20"> <span class="f-r"> <a class="btn btn-primary radius" onclick="openLayer('{:url('Category/add')}')" href="javascript:;"><i class="Hui-iconfont">&#xe600;</i> 添加分类</a></span> <span class="r"></span> </div>
@@ -11,10 +11,11 @@
 			<thead>
 				<tr class="text-c">
 					<th width="40"><input name="" type="checkbox" value=""></th>
-					<th width="80">ID</th>
+					<th width="80">商品名称</th>
 					<th width="30">排序序号</th>
 					<th width="100">分类</th>
-					<th width="100">图片</th>
+					<th width="100">价格</th>
+					<th width="100">库存量</th>
 					<th width="100">操作</th>
 				</tr>
 			</thead>
@@ -22,32 +23,30 @@
 				{volist name="$products" id="vo"}
 					<tr class="text-c">
 						<td><input name="" type="checkbox" value=""></td>
-						<td>{$vo.id}</td><!--id-->
+						<td>{$vo.name}</td>  <!--id-->
+						<td class="text-c listorder"><input  size="4" attr-id="{$vo.id}" name="listorder" value="{$vo.listorder}"/></td><!--排序序号，在common.js中响应-->
+						<td>{$vo.category.name}</td>  <!--  分类  -->
+						<td>{$vo.price}</td>  <!--  价格 -->
+						<td>{$vo.stock}</td>  <!--  库存量  -->
+						<td class="td-manage">  <!--  编辑  -->
+							<a style="text-decoration:none" class="ml-5" onClick="openLayer('{:url('category/edit',['id'=>$vo.id, 'name'=>$vo.name])}')" 	href="javascript:;" title="编辑"><i class="Hui-iconfont">&#xe6df;</i></a>
 
-						<!--<td class="text-c listorder"><input  size="4" attr-id="{$vo.id}" name="listorder" value="{$vo.order}"/></td>&lt;!&ndash;排序序号，在common.js中设置了 .listorder input的 jquery选择器，当失去焦点时会向服务器发送post数据，并在回调函数中响应&ndash;&gt;-->
-						<!--<td>{$vo.name}</td>&lt;!&ndash;分类&ndash;&gt;-->
-
-						<!--<td><img  src="{$vo.img.url}" height="100" width="200"></td>&lt;!&ndash;图片&ndash;&gt;-->
-						<!--<td class="td-manage">-->
-							<!--<a style="text-decoration:none" class="ml-5" onClick="openLayer('{:url('category/edit',['id'=>$vo.id, 'name'=>$vo.name])}')" 	href="javascript:;" title="编辑"><i class="Hui-iconfont">&#xe6df;</i></a>-->
-
-							<!--<a style="text-decoration:none" class="ml-5" onClick="deleteCategory({$vo.id})" href="javascript:;" title="删除">-->
-								<!--<i class="Hui-iconfont">&#xe6e2;</i></a>-->
-						<!--</td>-->
-
+							<a style="text-decoration:none" class="ml-5" onClick="deleteCategory({$vo.id})" href="javascript:;" title="删除">
+								<i class="Hui-iconfont">&#xe6e2;</i></a>
+						</td>
 					</tr>
 				{/volist}
 			</tbody>
 		</table>
-		<div class="my-page">{$categories->render()}</div>
+		<div class="my-page">{$products->render()}</div>
 	</div>
 </div>
 
-
+<!--    -->
 
 <script>
 	var SCOPE={
-	    'listorder_url': "{:url('category/listorder')}",
+	    'listorder_url': "{:url('product/listorder')}",
 	};
 </script>
 {include file="public/footer" /}
@@ -55,10 +54,10 @@
 <script>
     function openLayer(url){
         layer.open({
-            scrollbar: false,//不显示滚动条
+            scrollbar: true,//是否显示滚动条
             type: 2,
-            area: ['850px', '550px'],
-            fix: false, //不固定
+            area: ['800px', '500px'],
+            fix: false, //是否固定
             maxmin: true,
             shade:0.4,
             title: "添加商品分类",

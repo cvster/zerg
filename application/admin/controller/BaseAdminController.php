@@ -14,7 +14,7 @@ use think\Request;
 
 class BaseAdminController extends Controller
 {
-    //设置默认返回类型为html
+    //设置默认返回类型为html，在模块下面的config.php里设置了，这里注释掉
     public function _initialize(){
 //        \think\Config::set('default_return_type', 'html');
     }

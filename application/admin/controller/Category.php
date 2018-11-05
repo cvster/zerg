@@ -38,6 +38,7 @@ class Category extends BaseAdminController
 
         $categoryModel = new CategoryModel();
         $categories = $categoryModel->getCategoriesByPage($pageNum);
+//        return 'aa';
         echo $this->fetch('',['categories'=>$categories]);
     }
 
@@ -163,15 +164,15 @@ class Category extends BaseAdminController
         $categoryValidate = new CategoryValidate();
         $data = [ 'id'=>$id, 'listorder'=>$listorder ];
         if(!$categoryValidate->scene('listorder')->check($data)){
-            return json('参数错误');
+            return jsonResult(0,'参数错误');
         }
 
         $category = CategoryModel::get($id);
-        if($category->order == $listorder)
-            $this->result($_SERVER['HTTP_REFERER'], 2,'listorder not change');
+        if($category->listorder == $listorder)
+            return jsonResult(2,'listorder not change');
         ///$_SERVER['HTTP_REFERER']是教程里面用来刷新页面的，这里没啥用
 
-        $category->order = $listorder;
+        $category->listorder = $listorder;
         $res=$category->save();
         //$categoryModel = new CategoryModel();
         //$res = $categoryModel->save(['order'=>$listorder], ['id'=>$id]);//save两个参数表示更新，第一个是更新的字段，第二个是where

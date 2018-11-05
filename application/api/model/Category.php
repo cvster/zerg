@@ -36,7 +36,7 @@ class Category extends BaseModel
     public function getCategoriesByPage($num)
     {
         $categories = self::with('products,img')
-            ->order('order')
+            ->order('listorder')
             ->paginate($num);
         return $categories;
     }
