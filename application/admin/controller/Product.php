@@ -46,13 +46,20 @@ class Product extends Controller
         return resResult($res,'更新成功','更新失败');
     }
 
+    public function add()
+    {
+        $product = ['name'=>'','id'=>-1,'imgUrl'=>'/static/images/chooseImage2.jpg', ];//id = -1 表示新增，这里imgUrl是一个‘请添加图片的图’，实际还需要上传图片
+        return $this->fetch('product/edit',['category'=>$product]);
+    }
+
     public function edit($id,$name)
     {
-        $category = ProductModel::get($id);
+        //todo 需要加validate
+        $product = ProductModel::get($id);
 //        $image = ImageModel::get($category->topic_img_id);
 //        $imgUrl = $image->url;
 //        $category = ['name'=>$name, 'id'=>$id, 'imgUrl'=>$imgUrl];
-//        return $this->fetch('category/edit',['category'=>$category]);
+        return $this->fetch('product/edit',['product'=>$product]);
     }
 
 

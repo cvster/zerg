@@ -48,12 +48,12 @@ class Category extends BaseAdminController
         return $this->fetch('category/edit',['category'=>$category]);
     }
 
-    public function edit($id,$name)
+    public function edit($id)
     {
         $category = CategoryModel::get($id);
         $image = ImageModel::get($category->topic_img_id);
         $imgUrl = $image->url;
-        $category = ['name'=>$name, 'id'=>$id, 'imgUrl'=>$imgUrl];
+        $category = ['name'=>$category->name, 'id'=>$id, 'imgUrl'=>$imgUrl];
         return $this->fetch('category/edit',['category'=>$category]);
     }
 
