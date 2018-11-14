@@ -2,51 +2,113 @@
 
 {include file="public/header" /}
 <body>
-<div class="page-container">
+<div class="page-container"  style="overflow-y:Scroll;overflow-x:hidden">
 
 	<form id="formAdd" class="form form-horizontal form-o2o-add" method="post" action="##" onsubmit="return false" enctype="multipart/form-data">
 
-		<div class="row cl" comment="商品分类名称">
-			<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>商品分类名称：</label>
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>商品名称：</label>
 			<div class="formControls col-xs-8 col-sm-8">
-				<input type="text" class="input-text" value="{$product.name}" placeholder="" id="name" name="name" required>
+				<input  id="name" name="name" type="text" class="input-text" value="{$product.name}" placeholder="" required>
+			</div>
+		</div>
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>所属分类：</label>
+			<div class="formControls col-xs-8 col-sm-8">
+				<span class="select-box">
+				<select class="select" id="categoryId" name="categoryId">
+					<!--<option value="0">一级分类</option>-->
+				  	{volist name="categories" id="vo"}
+					<option value="{$vo.id}" {if condition="$product.id eq $vo.id"} selected="selected"{/if}>--{$vo.name}--</option>
+					{/volist}
+				</select>
+				</span>
+			</div>
+		</div>
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>价格：</label>
+			<div class="formControls col-xs-8 col-sm-8">
+				<input  id="price" name="price" type="text" class="input-text" value="{$product.price}" placeholder="" required>
+			</div>
+		</div>
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>库存量：</label>
+			<div class="formControls col-xs-8 col-sm-8">
+				<input  id="stock" name="stock" type="text" class="input-text" value="{$product.stock}" placeholder="" required>
 			</div>
 		</div>
 
-		<input type="hidden" name="id" value="{$product.id}" comment="-----隐藏的input，上传id-">
 
-		<div class="row cl" comment="----上传图片">
-			<div class="row cl">
-				<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>分类图片：</label>
+		<input type="hidden" name="id" value="{$product.id}" comment="--隐藏的input，上传product id--">
 
-				<div class="btn-upload col-xs-9 col-sm-8" comment="-----上传文件">
-					<a href="javascript:void(0);" class="btn btn-primary radius btn-upload"><i class="Hui-iconfont">&#xe642;</i> 选择图片</a>
-					<input id="file" type="file" accept="image/png,image/jpg,image/jpeg" name="file" onchange="changePic(this)" class="input-file">
-				</div>
 
-			</div>
-		</div>
-
-		<div class="row cl text-c" comment="图片预览">
+		<div class="row cl" comment="----上传商品主图">
+            <label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>商品主图：</label>
+            <div class="btn-upload col-xs-9 col-sm-8" comment="--上传文件--">
+                <a href="javascript:void(0);" class="btn btn-primary radius btn-upload"><i class="Hui-iconfont">&#xe642;</i> 选择图片</a>
+                <input id="file" name="file" type="file" accept="image/png,image/jpg,image/jpeg" onchange="changePic(this)" class="input-file">
+            </div>
+        </div>
+		<div class="row cl text-c" comment="商品主图预览">
 			<div class="col-xs-6 col-sm-8 col-xs-offset-2 col-sm-offset-2">
-				<div ><img src="{$product.main_img_url}" id="showImage" height="100" width="max" class="radius"></div>
+				<div ><img id="showImage" src="{$product.main_img_url}" height="200" width="max" class="radius"></div>
 			</div>
 		</div>
 
-		<div class="row cl text-c" comment="保存取消">
+
+        <div class="row cl" comment="----上传商品详情">
+            <label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>商品详情：</label>
+            <div class="btn-upload col-xs-9 col-sm-8" comment="--上传多图--">
+                <a href="javascript:void(0);" class="btn btn-primary radius btn-upload"><i class="Hui-iconfont">&#xe642;</i> 选择图片</a>
+                <input id="files" name="files[]"  type="file" accept="image/png,image/jpg,image/jpeg" onchange="changePics(this)" class="input-file"  multiple="multiple" >
+				&nbsp;&nbsp;（图片按文件名顺序排列）
+			</div>
+        </div>
+
+
+        <div class="row cl text-c" comment="商品详情预览">
+            <div  id="imgs" class="col-xs-6 col-sm-8 col-xs-offset-2 col-sm-offset-2">
+				{volist name="imgs" id="vo"}
+				<div ><img  id="showImages" src="{$vo.imgUrl.url}" height="max" width="500" class="radius"></div>
+				{/volist} <br /><br />
+            </div>
+        </div>
+
+
+		<div class="row cl text-c" comment="保存取消"><br /><br />
 			<span class="col-xs-4 col-sm-4 col-xs-offset-2 col-sm-offset-2">
 				<button  type="submit" class="btn btn-primary radius" value="保存"><i class="Hui-iconfont">&#xe632;</i> 保存 </button></span>
 			<span class="col-xs-4 col-sm-4 text-c">
 				<button onClick="submitCancel();" class="btn btn-default radius" type="button">&nbsp;&nbsp;取消&nbsp;&nbsp;</button></span>
+			<br /><br />   <br /><br />   <br /><br />
 		</div>
 
 	</form>
-</div>
 </div>
 
 {include file="public/footer" /}
 
 <script>
+
+//    result.innerHTML = result.innerHTML + '<img src="' + this.result +'" alt="" />';
+
+
+    //预览图片
+    function changePic(obj) {
+        var newSrc=getObjectURL(obj.files[0]);
+        document.getElementById('showImage').src=newSrc;
+    }
+
+
+    function changePics(obj) {
+        var imgs=document.getElementById("imgs");
+        imgs.innerHTML = "";
+        for(i = 0; i< obj.files.length; i ++) {
+            var newSrc=getObjectURL(obj.files[i]);
+            console.log(i);
+			imgs.innerHTML = imgs.innerHTML + '<div ><img src="' + newSrc +'"  height="max" width="500"  /></div>';
+        }
+    }
 
     $(document).ready(function() {
 
@@ -61,7 +123,8 @@
             success:       function (result) {
                 console.log(result);//打印服务端返回的数据(调试用)
                 if (result.code == 1) {
-                    parent.parent.toastr.success("保存成功");
+                    toastr.options={timeout:5000, positionClass: "toast-top-center"};
+                    toastr.success("保存成功");
                     parent.location.reload();
                 }
                 if (result.code == 0) {
@@ -88,29 +151,9 @@
                 // 为了防止普通浏览器进行表单提交和产生页面导航（防止页面刷新？）返回false
                 return false;
             }
-        })
+        });
 
     });
-
-    //预览图片
-    function changePic(obj) {
-        console.log(obj.files[0]);//这里可以获取上传文件的name
-        var newSrc=getObjectURL(obj.files[0]);
-        document.getElementById('showImage').src=newSrc;
-    }
-    //建立一個可存取到該file的url
-    function getObjectURL(file) {
-        var url = null ;
-        // 下面函数执行的效果是一样的，只是需要针对不同的浏览器执行不同的 js 函数而已
-        if (window.createObjectURL!=undefined) { // basic
-            url = window.createObjectURL(file) ;
-        } else if (window.URL!=undefined) { // mozilla(firefox)
-            url = window.URL.createObjectURL(file) ;
-        } else if (window.webkitURL!=undefined) { // webkit or chrome
-            url = window.webkitURL.createObjectURL(file) ;
-        }
-        return url ;
-    }
 
 
     function submitCancel() {

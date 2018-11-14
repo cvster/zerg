@@ -53,3 +53,13 @@ function tryDelete($deleteFileUrl){
     }
     return true;
 }
+
+/**
+ * 移动文件至static/images，返回文件路径
+ */
+function moveImg($file){
+    $info = $file->move('images');
+    $pathInfo = $info->getPathname();
+    $pathInfo = '/'.str_replace('\\', '/',  $pathInfo);//在windows下调试的时候，获取的pathname是 \ ，但是最后是要部署到linux上的，是 / ，而windows上两个都行，所有换成 /
+    return $pathInfo;
+}

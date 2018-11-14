@@ -13,7 +13,7 @@ class Image extends BaseModel
         return $this->prefixImgUrl($value, $data);
     }
 
-    public function mySave($url=null, $from=null, $usage_comment=null){
+    public function easySave($url=null, $from=null, $usage_comment=null){
 
         if($url!=null)
             $data['url'] = $url;

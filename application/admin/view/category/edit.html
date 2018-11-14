@@ -2,7 +2,7 @@
 
 {include file="public/header" /}
 <body>
-<div class="page-container">
+<div class="page-container"  style="overflow-y:Scroll;overflow-x:hidden">
 
 	<form id="formAdd" class="form form-horizontal form-o2o-add" method="post" action="##" onsubmit="return false" enctype="multipart/form-data">
 
@@ -48,6 +48,13 @@
 
 <script>
 
+    //预览图片
+    function changePic(obj) {
+//        console.log(obj.files[0]);//这里可以获取上传文件的name
+        var newSrc=getObjectURL(obj.files[0]);
+        document.getElementById('showImage').src=newSrc;
+    }
+
     $(document).ready(function() {
 
         //ajaxSubmit参数设置
@@ -61,8 +68,11 @@
             success:       function (result) {
                 console.log(result);//打印服务端返回的数据(调试用)
                 if (result.code == 1) {
-                    parent.parent.toastr.success("保存成功");
-                    parent.location.reload();
+//                    parent.parent.toastr.success("保存成功");
+//                    layer.alert('保存成功');
+                    toastr.options={timeout:5000, positionClass: "toast-top-center"};
+                    toastr.success("保存成功");
+					parent.location.reload();
                 }
                 if (result.code == 0) {
                     toastr.error('警告：'+result.msg);
@@ -89,29 +99,7 @@
                 return false;
             }
         })
-
     });
-
-    //预览图片
-    function changePic(obj) {
-        console.log(obj.files[0]);//这里可以获取上传文件的name
-        var newSrc=getObjectURL(obj.files[0]);
-        document.getElementById('showImage').src=newSrc;
-    }
-    //建立一個可存取到該file的url
-    function getObjectURL(file) {
-        var url = null ;
-        // 下面函数执行的效果是一样的，只是需要针对不同的浏览器执行不同的 js 函数而已
-        if (window.createObjectURL!=undefined) { // basic
-            url = window.createObjectURL(file) ;
-        } else if (window.URL!=undefined) { // mozilla(firefox)
-            url = window.URL.createObjectURL(file) ;
-        } else if (window.webkitURL!=undefined) { // webkit or chrome
-            url = window.webkitURL.createObjectURL(file) ;
-        }
-        return url ;
-    }
-
 
     function submitCancel() {
         layer_close();

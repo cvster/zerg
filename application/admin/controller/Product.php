@@ -11,6 +11,7 @@ namespace app\admin\controller;
 
 use think\Controller;
 use app\api\model\Product as ProductModel;
+use app\api\model\Category as CategoryModel;
 use app\api\validate\Product as ProductValidate;
 
 class Product extends Controller
@@ -46,26 +47,55 @@ class Product extends Controller
         return resResult($res,'更新成功','更新失败');
     }
 
-    public function add()
+
+    public function add()//todo 这个还没改
     {
-        $product = ['name'=>'','id'=>-1,'imgUrl'=>'/static/images/chooseImage2.jpg', ];//id = -1 表示新增，这里imgUrl是一个‘请添加图片的图’，实际还需要上传图片
-        return $this->fetch('product/edit',['category'=>$product]);
+        $categoryModel = new CategoryModel();
+        $categories =$categoryModel->getAllCategories();
+        $product = ['name'=>'','id'=>-1,'price'=>'','stock'=>'',
+            'main_img_url'=>'/static/images/chooseImage2.jpg'];//id = -1 表示新增，这里imgUrl是一个‘请添加图片的图’，实际还需要上传图片
+        return $this->fetch('product/edit',['product'=>$product, 'categories'=>$categories, 'imgs'=>[]]);
     }
 
     public function edit($id,$name)
     {
         //todo 需要加validate
-        $product = ProductModel::get($id);
-//        $image = ImageModel::get($category->topic_img_id);
-//        $imgUrl = $image->url;
-//        $category = ['name'=>$name, 'id'=>$id, 'imgUrl'=>$imgUrl];
-        return $this->fetch('product/edit',['product'=>$product]);
+        $product = ProductModel::getProductDetail($id);
+        $categoryModel = new CategoryModel();
+        $categories =$categoryModel->getAllCategories();
+        $imgs = $product->imgs;
+        return $this->fetch('product/edit',['product'=>$product, 'categories'=>$categories, 'imgs'=>$imgs]);
     }
 
 
+    //添加分类时在这里保存,表单提交的形式是post。
+    public function save()
+    {
+        //todo: 刚复制过来
+        $data = input('post.');
+        $id = $data['id'];
+        if($data['name'] == '')
+            $this->error('分类名不能为空');
 
+        //id = -1表示新增, 不等于-1表示编辑
+        if($id == -1)
+            return $this->addSave($data);
+        else
+            return $this->editSave($data, $id);
+    }
 
+    protected function addSave($data){
+        $mainImg = request()->file('file');
+        if(!$mainImg) return jsonResult(0,'未选择商品主图');
+        $mainImgPath=moveImg($mainImg);
 
+        $detailImgs = request()->file('files');
+        foreach($detailImgs as $detailImg){
+            echo 'aa';
+        }
+
+        if(!$detailImgs) return jsonResult(0,'未选择商品详情');
+    }
 
 
 

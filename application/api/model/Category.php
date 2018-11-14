@@ -41,7 +41,16 @@ class Category extends BaseModel
         return $categories;
     }
 
-    public function mySave($name=null, $topic_img_id=null){
+    //$num,每页显示的数量
+    public function getAllCategories()
+    {
+        $categories = self::with('products,img')
+            ->order('listorder')->select();
+        return $categories;
+    }
+
+
+    public function easySave($name=null, $topic_img_id=null){
         //不能用$this->name = $name; $this->save(),因为这样$this->name改变的是category类的name
 
         if($name != null)
