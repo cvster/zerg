@@ -34,7 +34,7 @@ function sleep(numberMillis) {
 }
 
 
-//建立一個可存取到file的url
+//建立一個可存取到form input选择的file的url
 function getObjectURL(file) {
     var url = null ;
     // 下面函数执行的效果是一样的，只是需要针对不同的浏览器执行不同的 js 函数而已

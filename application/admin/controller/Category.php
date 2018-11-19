@@ -51,8 +51,7 @@ class Category extends BaseAdminController
     public function edit($id)
     {
         $category = CategoryModel::get($id);
-        $image = ImageModel::get($category->topic_img_id);
-        $imgUrl = $image->url;
+        $imgUrl = $category->img_url;
         $category = ['name'=>$category->name, 'id'=>$id, 'imgUrl'=>$imgUrl];
         return $this->fetch('category/edit',['category'=>$category]);
     }
@@ -63,73 +62,52 @@ class Category extends BaseAdminController
         //todo: validate，待完善
         $data = input('post.');
         $id = $data['id'];
+        $name = $data['name'];
         if($data['name'] == '')
             $this->error('分类名不能为空');
 
         //id = -1表示新增, 不等于-1表示编辑
         if($id == -1)
-            return $this->addSave($data);
+            return $this->addSave($name);
         else
-            return $this->editSave($data, $id);
+            return $this->editSave($name, $id);
     }
 
-    protected function addSave($data){
+    protected function addSave($name){
         //将接收的图片放在/public/images目录下。
-        $file = Request::instance()->file('file');
-        if(!$file) return jsonResult(0,'未选择图片');
-
-        $pathInfo=moveImg($file);
-
-        //将img信息存入数据库
-        $image = new ImageModel;
-        $res = $image->easySave($pathInfo,1,'useless');
-        if(!$res)  return jsonResult(0,'图像路径存入数据库时产生异常');
+        $file = request()->file('file');
+        if(!$file) return codeResult(0,'未选择图片');
+        $imgPathInfo=moveImg($file);
 
         //将category信息存入数据库
         $category = new CategoryModel;
-        $res = $category->easySave($data['name'],$image->id);
-        if(!$res)  return jsonResult(0,'数据库存储时产生异常');
-
-        $image->usage_comment = 'image for category id = '.($category->id);
-        $image->save();
-
-        return jsonResult(1,'保存成功');
+        $res = $category->easySave($name,$imgPathInfo);
+        return boolResult($res,'保存成功','保存失败');
     }
 
-    protected function editSave($data, $id)
+    protected function editSave($name, $id)
     {
         $category = CategoryModel::get($id);
-        $file = Request::instance()->file('file');//这里需要判断是不是有文件，没有的话就用原来的图片，有的话就用新的图片，并删掉原来的。
+        $imgFile = Request::instance()->file('file');//这里需要判断是不是有文件，没有的话就用原来的图片，有的话就用新的图片，并删掉原来的。
 
-        if(!$file){//说明没有改图片
-            $res = $category->easySave($data['name']);
-            return resResult($res,'保存成功','数据库存储时产生异常');
+        if(!$imgFile){//说明没有改图片
+            $res = $category->easySave($name);
+            return boolResult($res,'保存成功','数据库存储时产生异常');
         }
         else{//有文件，说明改了图片，先保存category，再尝试删掉原来的图片。
 
-            //获取旧图片的url
-            $oldImg=ImageModel::get($category->topic_img_id);
-            $oldImgUrl=$oldImg->url;
-
-            //保存img文件
-            $info = $file->move('images');
-            $pathInfo = $info->getPathname();
-            $pathInfo = '/'.str_replace('\\', '/',  $pathInfo);//在windows下，获取的pathname是 \ ，但是最后是要部署到linux上的，是 / ，而windows上两个都行，所有换成 /
-
-            //将img信息存入数据库
-            $image = new ImageModel;
-            $res = $image->easySave($pathInfo,1, 'image for category id = '.($category->id));
-            if(!$res)  return jsonResult(0,'图像路径存入数据库时产生异常');
+            $oldImgPath=$category->img_url;//获取旧图片的url
+            $newImgPath = moveImg($imgFile);//保存新的img文件
 
             //保存category信息
-            $res = $category->easySave($data['name'],$image->id);
-            if(!$res)  return jsonResult(0,'数据库存储时产生异常');
+            $res = $category->easySave($name,$newImgPath);
+            if(!$res)  return codeResult(0,'数据库存储时产生异常');
 
-            //尝试删除旧图片，不成功也没关系，仍然返回成功代码1，但是做出提示
-            if(!tryDelete($oldImgUrl))
-                return jsonResult(1,'分类删除成功,但是分类图片删除失败');
+            //保存成功之后，再尝试删除旧图片，不成功也没关系，仍然返回成功代码1，但是做出提示
+            if(!tryDelete($oldImgPath))
+                return codeResult(1,'分类删除成功,但是分类图片删除失败');
 
-            return jsonResult(1,'保存成功');
+            return codeResult(1,'保存成功');
         }
     }
 
@@ -143,16 +121,16 @@ class Category extends BaseAdminController
             $imagePath = $_SERVER['DOCUMENT_ROOT'].$image->url;
 
             $res = CategoryModel::destroy(intval($category->id));
-            if(!$res)  return jsonResult(0,'删除失败');
+            if(!$res)  return codeResult(0,'删除失败');
 
             try{
                 ImageModel::destroy(intval($image->id));
                 unlink($imagePath);
             }catch (\Exception $e){
-                return jsonResult(0,'分类删除成功,但是分类图片删除失败');
+                return codeResult(0,'分类删除成功,但是分类图片删除失败');
             }
 
-            return jsonResult(1,'删除成功');
+            return codeResult(1,'删除成功');
         }
 
 
@@ -162,19 +140,19 @@ class Category extends BaseAdminController
         $categoryValidate = new CategoryValidate();
         $data = [ 'id'=>$id, 'listorder'=>$listorder ];
         if(!$categoryValidate->scene('listorder')->check($data)){
-            return jsonResult(0,'参数错误');
+            return codeResult(0,'参数错误');
         }
 
         $category = CategoryModel::get($id);
         if($category->listorder == $listorder)
-            return jsonResult(2,'listorder not change');
+            return codeResult(2,'listorder not change');
         ///$_SERVER['HTTP_REFERER']是教程里面用来刷新页面的，这里没啥用
 
         $category->listorder = $listorder;
         $res=$category->save();
         //$categoryModel = new CategoryModel();
         //$res = $categoryModel->save(['order'=>$listorder], ['id'=>$id]);//save两个参数表示更新，第一个是更新的字段，第二个是where
-        return resResult($res,'更新成功','更新失败');
+        return boolResult($res,'更新成功','更新失败');
     }
 
 }

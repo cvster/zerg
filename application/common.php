@@ -24,7 +24,7 @@ function htmlStatus($status) {
 
 
 
-function jsonResult($code, $msg='', $data=[]) {
+function codeResult($code, $msg='', $data=[]) {
     return [
         'code' => intval($code),
         'msg' => $msg,
@@ -32,7 +32,18 @@ function jsonResult($code, $msg='', $data=[]) {
     ];
 }
 
-function resResult($res, $successMsg='' , $errorMsg='', $data=[]) {
+
+/**
+ *    传入一个bool值，和两个Msg
+ *    1 就返回code=1，msg=successMsg,
+ *    0 就返回 code=0, msg=errorMsg,
+ * @param $res bool 值，
+ * @param string $successMsg
+ * @param string $errorMsg
+ * @param array $data
+ * @return array
+ */
+function boolResult($res, $successMsg='' , $errorMsg='', $data=[]) {
     return [
         'code' => $res? 1:0,
         'msg' => $res? $successMsg:$errorMsg,

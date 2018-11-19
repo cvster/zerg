@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net
 --
 -- 主机: localhost
--- 生成日期: 2018-11-03 20:55:26
+-- 生成日期: 2018-11-15 17:15:54
 -- 服务器版本: 5.6.35-log
 -- PHP 版本: 5.4.45
 
@@ -80,108 +80,31 @@ INSERT INTO `banner_item` (`id`, `img_id`, `key_word`, `type`, `delete_time`, `b
 CREATE TABLE IF NOT EXISTS `category` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(50) NOT NULL COMMENT '分类名称',
-  `topic_img_id` int(11) DEFAULT NULL COMMENT '外键，关联image表',
+  `img_url` varchar(255) DEFAULT NULL COMMENT '外键，关联image表',
   `delete_time` int(11) DEFAULT NULL,
   `description` varchar(100) DEFAULT NULL COMMENT '描述',
   `update_time` int(11) DEFAULT NULL,
   `create_time` int(11) DEFAULT NULL,
-  `order` float NOT NULL DEFAULT '0',
+  `listorder` float NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `id` (`id`),
   UNIQUE KEY `id_2` (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COMMENT='商品类目' AUTO_INCREMENT=91 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COMMENT='商品类目' AUTO_INCREMENT=92 ;
 
 --
 -- 转存表中的数据 `category`
 --
 
-INSERT INTO `category` (`id`, `name`, `topic_img_id`, `delete_time`, `description`, `update_time`, `create_time`, `order`) VALUES
-(2, '果味', 6, NULL, NULL, 1540454198, NULL, 1),
-(3, '蔬菜', 5, NULL, NULL, NULL, NULL, 8),
-(4, '炒货', 7, NULL, NULL, 1540454208, NULL, 2),
-(5, '点心', 4, NULL, NULL, NULL, NULL, 7),
-(6, '粗茶', 8, NULL, NULL, NULL, NULL, 9),
-(7, '淡饭', 9, NULL, NULL, 1540454214, NULL, 3),
-(11, '4第三方', NULL, 1539227103, NULL, NULL, NULL, 2),
-(12, 'ttt', NULL, 1539227162, NULL, NULL, NULL, 0),
-(13, '炒货23334444', NULL, 1539237409, NULL, NULL, NULL, 0),
-(14, '炒货23334444555666', NULL, 1539237403, NULL, NULL, NULL, 0),
-(15, '333555', NULL, 1539613787, NULL, NULL, NULL, 0),
-(16, '444', NULL, 1539613800, NULL, NULL, NULL, 1),
-(17, '66666', NULL, 1539613915, NULL, NULL, NULL, 1),
-(18, '7777', NULL, 1539613675, NULL, NULL, NULL, 0),
-(19, '99999', NULL, 1539613669, NULL, NULL, NULL, 0),
-(20, 'testtt', NULL, 1539613654, NULL, NULL, NULL, 0),
-(21, 'aaaabb', NULL, 1539612036, NULL, NULL, NULL, 0),
-(22, 'adsf', NULL, 1539613568, NULL, NULL, NULL, 0),
-(23, '121', NULL, 1539613611, NULL, NULL, NULL, 0),
-(24, '1234', NULL, 1539613616, NULL, NULL, NULL, 0),
-(25, 'gfzx', NULL, 1539613650, NULL, NULL, NULL, 0),
-(26, 'iiiii', NULL, 1539440720, NULL, NULL, NULL, 0),
-(27, 'vvvv', NULL, 1539440742, NULL, NULL, NULL, 0),
-(28, '56756', NULL, 1539440748, NULL, NULL, NULL, 0),
-(29, 'afdvzcx', NULL, 1539440805, NULL, NULL, NULL, 0),
-(30, '456', NULL, 1539440824, NULL, NULL, NULL, 0),
-(31, 'sdaads', NULL, 1539442972, NULL, NULL, NULL, 0),
-(32, '111', NULL, 1539604192, NULL, NULL, NULL, 0),
-(33, '2345555', NULL, 1539604326, NULL, NULL, NULL, 0),
-(34, '111', NULL, 1539604344, NULL, NULL, NULL, 0),
-(35, 'qqq', NULL, 1539611254, NULL, NULL, NULL, 0),
-(36, '555', NULL, 1539611558, NULL, NULL, NULL, 0),
-(37, '11', NULL, 1539611618, NULL, NULL, NULL, 0),
-(38, '23', NULL, 1539611653, NULL, NULL, NULL, 0),
-(39, '222', NULL, 1539611702, NULL, NULL, NULL, 0),
-(40, 'adsfad', NULL, 1539611804, NULL, NULL, NULL, 0),
-(41, 'adsf', NULL, 1539613954, NULL, NULL, NULL, 0),
-(42, '444', NULL, 1539614126, NULL, NULL, NULL, 0),
-(43, '555', NULL, 1539614281, NULL, NULL, NULL, 0),
-(44, '222', NULL, 1539614616, NULL, NULL, NULL, 0),
-(45, '222', NULL, 1539614696, NULL, NULL, NULL, 0),
-(46, '23', NULL, 1539615038, NULL, NULL, NULL, 0),
-(47, 'daa', NULL, 1539616797, NULL, NULL, NULL, 0),
-(48, '345', NULL, 1539616806, NULL, NULL, NULL, 0),
-(49, '234567', NULL, 1539614938, NULL, NULL, NULL, 0),
-(50, 'axiba啥电视剧 ', NULL, 1539614945, NULL, NULL, NULL, 0),
-(51, '23', NULL, 1539648526, NULL, NULL, NULL, 0),
-(52, 'ff', NULL, 1539648573, NULL, NULL, NULL, 0),
-(53, '33', NULL, 1539648665, NULL, NULL, NULL, 0),
-(54, 'dd', NULL, 1539699538, NULL, 1539699538, NULL, 0),
-(55, '444', NULL, 1539699541, NULL, 1539699541, NULL, 0),
-(56, '44444', NULL, 1539699545, NULL, 1539699545, NULL, 0),
-(57, '555', NULL, 1539649322, NULL, NULL, NULL, 0),
-(58, 'dd', NULL, 1539649280, NULL, NULL, NULL, 0),
-(59, '555', NULL, 1539649274, NULL, NULL, NULL, 0),
-(60, '666', NULL, 1539649247, NULL, NULL, NULL, 0),
-(61, 'hhh', NULL, 1539649244, NULL, NULL, NULL, 0),
-(62, '8765', NULL, 1539649174, NULL, NULL, NULL, 0),
-(63, 'mmp', NULL, 1539649105, NULL, NULL, NULL, 0),
-(64, '888', NULL, 1539649109, NULL, NULL, NULL, 0),
-(65, '555', NULL, 1539649169, NULL, NULL, NULL, 0),
-(66, 'adsf', NULL, 1539649240, NULL, NULL, NULL, 0),
-(67, '444', NULL, 1539699518, NULL, 1539699518, NULL, 0),
-(68, '222', NULL, 1539699515, NULL, 1539699515, NULL, 0),
-(69, 'www', NULL, 1539699512, NULL, 1539699512, NULL, 0),
-(70, '222', NULL, 1539699507, NULL, 1539699507, NULL, 0),
-(71, 'www', 73, 1539699503, NULL, 1539699503, 1539699357, 0),
-(72, '333', 74, 1539703786, NULL, 1539703786, 1539703768, 0),
-(73, '222', 75, 1539704208, NULL, 1539704208, 1539703845, 0),
-(74, '22w', 76, 1539704425, NULL, 1539704425, 1539704220, 0),
-(75, '22w', 76, 1540396707, NULL, 1540396707, 1539704392, 0),
-(76, 'afdsfaaaa', 80, 1540396334, NULL, 1540396334, 1540381142, 0),
-(77, 'id77', 81, 1540396315, NULL, 1540396315, 1540381320, 0),
-(78, 'ppp', 82, 1540395708, NULL, 1540395708, 1540381335, 0),
-(79, 'ppp', 83, 1540395704, NULL, 1540395704, 1540381360, 0),
-(80, 'ppp', 84, 1540395696, NULL, 1540395696, 1540381378, 0),
-(81, 'fff', 85, 1540395686, NULL, 1540395686, 1540390662, 0),
-(82, '33333', 86, 1540396797, NULL, 1540396797, 1540396767, 0),
-(83, 'ffff', 87, 1540396866, NULL, 1540396866, 1540396851, 0),
-(84, 'ddd', 88, 1540396902, NULL, 1540396902, 1540396892, 0),
-(85, 'fffff', 89, 1540396999, NULL, 1540396999, 1540396945, 0),
-(86, 'tet', 90, 1540435014, NULL, 1540435014, 1540432356, 0),
-(87, 'ttt', 91, 1540532803, NULL, 1540532803, 1540455123, 0),
-(88, 'mmme', 101, NULL, NULL, 1540542347, 1540458532, 0),
-(89, 'emmmmm', 102, NULL, NULL, 1540542379, 1540542370, 0),
-(90, 'wwww', 103, NULL, NULL, 1541249486, 1541249486, 0);
+INSERT INTO `category` (`id`, `name`, `img_url`, `delete_time`, `description`, `update_time`, `create_time`, `listorder`) VALUES
+(2, '果味', '/images/category-dryfruit.png', NULL, NULL, 1540454198, NULL, 1),
+(3, '蔬菜', '/images/category-vg.png', NULL, NULL, NULL, NULL, 8),
+(4, '炒货', '/images/category-fry-a.png', NULL, NULL, 1540454208, NULL, 2),
+(5, '点心', '/images/category-cake.png', NULL, NULL, NULL, NULL, 7),
+(6, '粗茶', '/images/category-tea.png', NULL, NULL, NULL, NULL, 9),
+(7, '淡饭', '/images/category-rice.png', NULL, NULL, 1540454214, NULL, 3),
+(88, 'mmme', '/images/20181114/f4e0d5e412bf1b2f511627ba2636fbb7.png', NULL, NULL, 1542190151, 1540458532, 0.4),
+(89, 'emmmmm', '/images/20181026/00e8498112517d80387a667cbf3e63cf.jpg', NULL, NULL, 1541250491, 1540542370, 2),
+(91, 'cc', '/images/20181115/ac5a5fcfe8d799f2f83792c1b930de48.png', NULL, NULL, 1542249574, 1542190166, 0);
 
 -- --------------------------------------------------------
 
@@ -193,12 +116,12 @@ CREATE TABLE IF NOT EXISTS `image` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `url` varchar(255) NOT NULL COMMENT '图片路径',
   `from` tinyint(4) NOT NULL DEFAULT '1' COMMENT '1 来自本地，2 来自公网',
-  `usage_comment` varchar(255) CHARACTER SET utf8 NOT NULL DEFAULT '""',
+  `usage_comment` varchar(255) CHARACTER SET utf8 NOT NULL DEFAULT 'useless',
   `delete_time` int(11) DEFAULT NULL,
   `update_time` int(11) DEFAULT NULL,
   `create_time` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COMMENT='图片总表' AUTO_INCREMENT=104 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COMMENT='图片总表' AUTO_INCREMENT=107 ;
 
 --
 -- 转存表中的数据 `image`
@@ -208,11 +131,6 @@ INSERT INTO `image` (`id`, `url`, `from`, `usage_comment`, `delete_time`, `updat
 (1, '/images/banner-1a.png', 1, '""', NULL, NULL, NULL),
 (2, '/images/banner-2a.png', 1, '""', NULL, NULL, NULL),
 (3, '/images/banner-3a.png', 1, '""', NULL, NULL, NULL),
-(4, '/images/category-cake.png', 1, '""', NULL, NULL, NULL),
-(5, '/images/category-vg.png', 1, '""', NULL, NULL, NULL),
-(6, '/images/category-dryfruit.png', 1, '""', NULL, NULL, NULL),
-(7, '/images/category-fry-a.png', 1, '""', NULL, NULL, NULL),
-(8, '/images/category-tea.png', 1, '""', NULL, NULL, NULL),
 (9, '/images/category-rice.png', 1, '""', NULL, NULL, NULL),
 (10, '/images/product-dryfruit@1.png', 1, '""', NULL, NULL, NULL),
 (13, '/images/product-vg@1.png', 1, '""', NULL, NULL, NULL),
@@ -220,17 +138,6 @@ INSERT INTO `image` (`id`, `url`, `from`, `usage_comment`, `delete_time`, `updat
 (16, '/images/1@theme.png', 1, '""', NULL, NULL, NULL),
 (17, '/images/2@theme.png', 1, '""', NULL, NULL, NULL),
 (18, '/images/3@theme.png', 1, '""', NULL, NULL, NULL),
-(19, '/images/detail-1@1-dryfruit.png', 1, '""', NULL, NULL, NULL),
-(20, '/images/detail-2@1-dryfruit.png', 1, '""', NULL, NULL, NULL),
-(21, '/images/detail-3@1-dryfruit.png', 1, '""', NULL, NULL, NULL),
-(22, '/images/detail-4@1-dryfruit.png', 1, '""', NULL, NULL, NULL),
-(23, '/images/detail-5@1-dryfruit.png', 1, '""', NULL, NULL, NULL),
-(24, '/images/detail-6@1-dryfruit.png', 1, '""', NULL, NULL, NULL),
-(25, '/images/detail-7@1-dryfruit.png', 1, '""', NULL, NULL, NULL),
-(26, '/images/detail-8@1-dryfruit.png', 1, '""', NULL, NULL, NULL),
-(27, '/images/detail-9@1-dryfruit.png', 1, '""', NULL, NULL, NULL),
-(28, '/images/detail-11@1-dryfruit.png', 1, '""', NULL, NULL, NULL),
-(29, '/images/detail-10@1-dryfruit.png', 1, '""', NULL, NULL, NULL),
 (31, '/images/product-rice@1.png', 1, '""', NULL, NULL, NULL),
 (32, '/images/product-tea@1.png', 1, '""', NULL, NULL, NULL),
 (33, '/images/product-dryfruit@2.png', 1, '""', NULL, NULL, NULL),
@@ -299,7 +206,10 @@ INSERT INTO `image` (`id`, `url`, `from`, `usage_comment`, `delete_time`, `updat
 (100, '/images/20181026/8bb48964f115e3bd83d353ac8c3ba7b4.jpg', 1, 'image for category id = 88', NULL, 1540542332, 1540542332),
 (101, '/images/20181026/ccf9f878581561bd7114cef095ec0175.jpg', 1, 'image for category id = 88', NULL, 1540542347, 1540542347),
 (102, '/images/20181026/00e8498112517d80387a667cbf3e63cf.jpg', 1, 'image for category id = 89', NULL, 1540542370, 1540542370),
-(103, '/images/20181103/fb4034fab46739f6044e71a3d920d608.jpg', 1, 'image for category id = 90', NULL, 1541249486, 1541249486);
+(103, '/images/20181103/fb4034fab46739f6044e71a3d920d608.jpg', 1, 'image for category id = 90', 1541264141, 1541264141, 1541249486),
+(104, '/images/20181104/abbd6bdd8a93fa4af235da2a25aa4620.jpg', 1, 'image for category id = 88', NULL, 1541264164, 1541264164),
+(105, '/images/20181112/eba9495820565b539b5ca57bf3d4fc48.jpg', 1, 'image for category id = 88', NULL, 1542013659, 1542013659),
+(106, '/images/20181112/4d7858232975c4fd733ffa6f14d4fd4c.jpg', 1, 'image for category id = 88', NULL, 1542013869, 1542013869);
 
 -- --------------------------------------------------------
 
@@ -378,17 +288,15 @@ INSERT INTO `order_product` (`order_id`, `product_id`, `count`, `delete_time`, `
 CREATE TABLE IF NOT EXISTS `product` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(80) NOT NULL COMMENT '商品名称',
-  `order` int(11) DEFAULT '0',
+  `listorder` int(11) DEFAULT '0',
   `price` decimal(6,2) NOT NULL COMMENT '价格,单位：分',
   `stock` int(11) NOT NULL DEFAULT '0' COMMENT '库存量',
   `delete_time` int(11) DEFAULT NULL,
   `category_id` int(11) DEFAULT NULL,
   `main_img_url` varchar(255) DEFAULT NULL COMMENT '主图ID号，这是一个反范式设计，有一定的冗余',
-  `from` tinyint(4) NOT NULL DEFAULT '1' COMMENT '图片来自 1 本地 ，2公网',
   `create_time` int(11) DEFAULT NULL COMMENT '创建时间',
   `update_time` int(11) DEFAULT NULL,
   `summary` varchar(50) DEFAULT NULL COMMENT '摘要',
-  `img_id` int(11) DEFAULT NULL COMMENT '图片外键',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 AUTO_INCREMENT=34 ;
 
@@ -396,39 +304,39 @@ CREATE TABLE IF NOT EXISTS `product` (
 -- 转存表中的数据 `product`
 --
 
-INSERT INTO `product` (`id`, `name`, `order`, `price`, `stock`, `delete_time`, `category_id`, `main_img_url`, `from`, `create_time`, `update_time`, `summary`, `img_id`) VALUES
-(1, '芹菜 半斤', 99, '0.01', 998, NULL, 3, '/images/product-vg@1.png', 1, NULL, NULL, NULL, 13),
-(2, '梨花带雨 3个', 99, '0.01', 984, NULL, 2, '/images/product-dryfruit@1.png', 1, NULL, NULL, NULL, 10),
-(3, '素米 327克', 99, '0.01', 996, NULL, 7, '/images/product-rice@1.png', 1, NULL, NULL, NULL, 31),
-(4, '红袖枸杞 6克*3袋', 99, '0.01', 998, NULL, 6, '/images/product-tea@1.png', 1, NULL, NULL, NULL, 32),
-(5, '春生龙眼 500克', 99, '0.01', 995, NULL, 2, '/images/product-dryfruit@2.png', 1, NULL, NULL, NULL, 33),
-(6, '小红的猪耳朵 120克', 99, '0.01', 997, NULL, 5, '/images/product-cake@2.png', 1, NULL, NULL, NULL, 53),
-(7, '泥蒿 半斤', 99, '0.01', 998, NULL, 3, '/images/product-vg@2.png', 1, NULL, NULL, NULL, 68),
-(8, '夏日芒果 3个', 99, '0.01', 995, NULL, 2, '/images/product-dryfruit@3.png', 1, NULL, NULL, NULL, 36),
-(9, '冬木红枣 500克', 99, '0.01', 996, NULL, 2, '/images/product-dryfruit@4.png', 1, NULL, NULL, NULL, 37),
-(10, '万紫千凤梨 300克', 99, '0.01', 996, NULL, 2, '/images/product-dryfruit@5.png', 1, NULL, NULL, NULL, 38),
-(11, '贵妃笑 100克', 99, '0.01', 994, NULL, 2, '/images/product-dryfruit-a@6.png', 1, NULL, NULL, NULL, 39),
-(12, '珍奇异果 3个', 99, '0.01', 999, NULL, 2, '/images/product-dryfruit@7.png', 1, NULL, NULL, NULL, 40),
-(13, '绿豆 125克', 99, '0.01', 999, NULL, 7, '/images/product-rice@2.png', 1, NULL, NULL, NULL, 41),
-(14, '芝麻 50克', 99, '0.01', 999, NULL, 7, '/images/product-rice@3.png', 1, NULL, NULL, NULL, 42),
-(15, '猴头菇 370克', 99, '0.01', 999, NULL, 7, '/images/product-rice@4.png', 1, NULL, NULL, NULL, 43),
-(16, '西红柿 1斤', 99, '0.01', 999, NULL, 3, '/images/product-vg@3.png', 1, NULL, NULL, NULL, 69),
-(17, '油炸花生 300克', 99, '0.01', 999, NULL, 4, '/images/product-fry@1.png', 1, NULL, NULL, NULL, 44),
-(18, '春泥西瓜子 128克', 99, '0.01', 997, NULL, 4, '/images/product-fry@2.png', 1, NULL, NULL, NULL, 45),
-(19, '碧水葵花籽 128克', 99, '0.01', 999, NULL, 4, '/images/product-fry@3.png', 1, NULL, NULL, NULL, 46),
-(20, '碧螺春 12克*3袋', 99, '0.01', 999, NULL, 6, '/images/product-tea@2.png', 1, NULL, NULL, NULL, 47),
-(21, '西湖龙井 8克*3袋', 99, '0.01', 998, NULL, 6, '/images/product-tea@3.png', 1, NULL, NULL, NULL, 48),
-(22, '梅兰清花糕 1个', 99, '0.01', 997, NULL, 5, '/images/product-cake-a@3.png', 1, NULL, NULL, NULL, 54),
-(23, '清凉薄荷糕 1个', 99, '0.01', 998, NULL, 5, '/images/product-cake-a@4.png', 1, NULL, NULL, NULL, 55),
-(25, '小明的妙脆角 120克', 99, '0.01', 999, NULL, 5, '/images/product-cake@1.png', 1, NULL, NULL, NULL, 52),
-(26, '红衣青瓜 混搭160克', 99, '0.01', 999, NULL, 2, '/images/product-dryfruit@8.png', 1, NULL, NULL, NULL, 56),
-(27, '锈色瓜子 100克', 99, '0.01', 998, NULL, 4, '/images/product-fry@4.png', 1, NULL, NULL, NULL, 57),
-(28, '春泥花生 200克', 99, '0.01', 999, NULL, 4, '/images/product-fry@5.png', 1, NULL, NULL, NULL, 58),
-(29, '冰心鸡蛋 2个', 99, '0.01', 999, NULL, 7, '/images/product-rice@5.png', 1, NULL, NULL, NULL, 59),
-(30, '八宝莲子 200克', 99, '0.01', 999, NULL, 7, '/images/product-rice@6.png', 1, NULL, NULL, NULL, 14),
-(31, '深涧木耳 78克', 99, '0.01', 999, NULL, 7, '/images/product-rice@7.png', 1, NULL, NULL, NULL, 60),
-(32, '土豆 半斤', 99, '0.01', 999, NULL, 3, '/images/product-vg@4.png', 1, NULL, NULL, NULL, 66),
-(33, '青椒 半斤', 99, '0.01', 999, NULL, 3, '/images/product-vg@5.png', 1, NULL, NULL, NULL, 67);
+INSERT INTO `product` (`id`, `name`, `listorder`, `price`, `stock`, `delete_time`, `category_id`, `main_img_url`, `create_time`, `update_time`, `summary`) VALUES
+(1, '芹菜 半斤', 4, '0.01', 998, NULL, 3, '/images/product-vg@1.png', NULL, 1541265305, NULL),
+(2, '梨花带雨 3个', 5, '0.01', 984, NULL, 2, '/images/product-dryfruit@1.png', NULL, 1541298920, NULL),
+(3, '素米 327克', 2, '0.01', 996, NULL, 7, '/images/product-rice@1.png', NULL, 1541298929, NULL),
+(4, '红袖枸杞 6克*3袋', 99, '0.01', 998, NULL, 6, '/images/product-tea@1.png', NULL, NULL, NULL),
+(5, '春生龙眼 500克', 99, '0.01', 995, NULL, 2, '/images/product-dryfruit@2.png', NULL, NULL, NULL),
+(6, '小红的猪耳朵 120克', 99, '0.01', 997, NULL, 5, '/images/product-cake@2.png', NULL, NULL, NULL),
+(7, '泥蒿 半斤', 99, '0.01', 998, NULL, 3, '/images/product-vg@2.png', NULL, NULL, NULL),
+(8, '夏日芒果 3个', 99, '0.01', 995, NULL, 2, '/images/product-dryfruit@3.png', NULL, NULL, NULL),
+(9, '冬木红枣 500克', 99, '0.01', 996, NULL, 2, '/images/product-dryfruit@4.png', NULL, NULL, NULL),
+(10, '万紫千凤梨 300克', 99, '0.01', 996, NULL, 2, '/images/product-dryfruit@5.png', NULL, NULL, NULL),
+(11, '贵妃笑 100克', 99, '0.01', 994, NULL, 2, '/images/product-dryfruit-a@6.png', NULL, NULL, NULL),
+(12, '珍奇异果 3个', 99, '0.01', 999, NULL, 2, '/images/product-dryfruit@7.png', NULL, NULL, NULL),
+(13, '绿豆 125克', 99, '0.01', 999, NULL, 7, '/images/product-rice@2.png', NULL, NULL, NULL),
+(14, '芝麻 50克', 99, '0.01', 999, NULL, 7, '/images/product-rice@3.png', NULL, NULL, NULL),
+(15, '猴头菇 370克', 99, '0.01', 999, NULL, 7, '/images/product-rice@4.png', NULL, NULL, NULL),
+(16, '西红柿 1斤', 99, '0.01', 999, NULL, 3, '/images/product-vg@3.png', NULL, NULL, NULL),
+(17, '油炸花生 300克', 99, '0.01', 999, NULL, 4, '/images/product-fry@1.png', NULL, NULL, NULL),
+(18, '春泥西瓜子 128克', 99, '0.01', 997, NULL, 4, '/images/product-fry@2.png', NULL, NULL, NULL),
+(19, '碧水葵花籽 128克', 99, '0.01', 999, NULL, 4, '/images/product-fry@3.png', NULL, NULL, NULL),
+(20, '碧螺春 12克*3袋', 99, '0.01', 999, NULL, 6, '/images/product-tea@2.png', NULL, NULL, NULL),
+(21, '西湖龙井 8克*3袋', 99, '0.01', 998, NULL, 6, '/images/product-tea@3.png', NULL, NULL, NULL),
+(22, '梅兰清花糕 1个', 99, '0.01', 997, NULL, 5, '/images/product-cake-a@3.png', NULL, NULL, NULL),
+(23, '清凉薄荷糕 1个', 99, '0.01', 998, NULL, 5, '/images/product-cake-a@4.png', NULL, NULL, NULL),
+(25, '小明的妙脆角 120克', 99, '0.01', 999, NULL, 5, '/images/product-cake@1.png', NULL, NULL, NULL),
+(26, '红衣青瓜 混搭160克', 99, '0.01', 999, NULL, 2, '/images/product-dryfruit@8.png', NULL, NULL, NULL),
+(27, '锈色瓜子 100克', 99, '0.01', 998, NULL, 4, '/images/product-fry@4.png', NULL, NULL, NULL),
+(28, '春泥花生 200克', 99, '0.01', 999, NULL, 4, '/images/product-fry@5.png', NULL, NULL, NULL),
+(29, '冰心鸡蛋 2个', 99, '0.01', 999, NULL, 7, '/images/product-rice@5.png', NULL, NULL, NULL),
+(30, '八宝莲子 200克', 99, '0.01', 999, NULL, 7, '/images/product-rice@6.png', NULL, NULL, NULL),
+(31, '深涧木耳 78克', 99, '0.01', 999, NULL, 7, '/images/product-rice@7.png', NULL, NULL, NULL),
+(32, '土豆 半斤', 99, '0.01', 999, NULL, 3, '/images/product-vg@4.png', NULL, NULL, NULL),
+(33, '青椒 半斤', 99, '0.01', 999, NULL, 3, '/images/product-vg@5.png', NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -438,7 +346,7 @@ INSERT INTO `product` (`id`, `name`, `order`, `price`, `stock`, `delete_time`, `
 
 CREATE TABLE IF NOT EXISTS `product_image` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `img_id` int(11) NOT NULL COMMENT '外键，关联图片表',
+  `img_url` varchar(55) NOT NULL COMMENT '外键，关联图片表',
   `delete_time` int(11) DEFAULT NULL COMMENT '状态，主要表示是否删除，也可以扩展其他状态',
   `order` int(11) NOT NULL DEFAULT '0' COMMENT '图片排序序号',
   `product_id` int(11) NOT NULL COMMENT '商品id，外键',
@@ -451,20 +359,18 @@ CREATE TABLE IF NOT EXISTS `product_image` (
 -- 转存表中的数据 `product_image`
 --
 
-INSERT INTO `product_image` (`id`, `img_id`, `delete_time`, `order`, `product_id`, `create_time`, `update_time`) VALUES
-(4, 19, NULL, 1, 11, NULL, NULL),
-(5, 20, NULL, 2, 11, NULL, NULL),
-(6, 21, NULL, 3, 11, NULL, NULL),
-(7, 22, NULL, 4, 11, NULL, NULL),
-(8, 23, NULL, 5, 11, NULL, NULL),
-(9, 24, NULL, 6, 11, NULL, NULL),
-(10, 25, NULL, 7, 11, NULL, NULL),
-(11, 26, NULL, 8, 11, NULL, NULL),
-(12, 27, NULL, 9, 11, NULL, NULL),
-(13, 28, NULL, 11, 11, NULL, NULL),
-(14, 29, NULL, 10, 11, NULL, NULL),
-(18, 62, NULL, 12, 11, NULL, NULL),
-(19, 63, NULL, 13, 11, NULL, NULL);
+INSERT INTO `product_image` (`id`, `img_url`, `delete_time`, `order`, `product_id`, `create_time`, `update_time`) VALUES
+(4, '/images/detail-1@1-dryfruit.png', NULL, 1, 11, NULL, NULL),
+(5, '/images/detail-2@1-dryfruit.png', NULL, 2, 11, NULL, NULL),
+(6, '/images/detail-3@1-dryfruit.png', NULL, 3, 11, NULL, NULL),
+(7, '/images/detail-4@1-dryfruit.png', NULL, 4, 11, NULL, NULL),
+(8, '/images/detail-5@1-dryfruit.png', NULL, 5, 11, NULL, NULL),
+(9, '/images/detail-6@1-dryfruit.png', NULL, 6, 11, NULL, NULL),
+(10, '/images/detail-7@1-dryfruit.png', NULL, 7, 11, NULL, NULL),
+(11, '/images/detail-8@1-dryfruit.png', NULL, 8, 11, NULL, NULL),
+(12, '/images/detail-9@1-dryfruit.png', NULL, 9, 11, NULL, NULL),
+(13, '/images/detail-11@1-dryfruit.png', NULL, 11, 11, NULL, NULL),
+(14, '/images/detail-10@1-dryfruit.png', NULL, 10, 11, NULL, NULL);
 
 -- --------------------------------------------------------
 

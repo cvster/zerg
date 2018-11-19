@@ -108,4 +108,17 @@ class Product extends BaseModel
         return $products;
     }
 
+    //调用该函数时，需先通过 xxModel::get($id) 或者 new xxModel 创建 model对象。
+    public function easySave($name=null, $price=null, $stock=null, $category_id=null, $main_img_url=null, $summary=null){
+        //不能用$this->name = $name; $this->save(),因为这样$this->name改变的是category类的name
+
+        if($name != null)             $data['name'] = $name;
+        if($price != null)            $data['price']= $price;
+        if($stock != null)            $data['stock']= $stock;
+        if($category_id != null)      $data['category_id']= $category_id;
+        if($main_img_url != null)     $data['main_img_url']= $main_img_url;
+        if($summary != null)          $data['summary']= $summary;
+
+        return $this->save($data);
+    }
 }

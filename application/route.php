@@ -99,4 +99,4 @@ Route::post('api/:version/message/delivery', 'api/:version.Message/sendDeliveryM
 
 // admin后台管理
 Route::get('admin', 'admin/index/index');
-
+Route::get('admin/login', 'admin/index/login');

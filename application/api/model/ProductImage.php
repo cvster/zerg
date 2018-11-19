@@ -20,4 +20,15 @@ class ProductImage extends BaseModel
     {
         return $this->belongsTo('Image', 'img_id', 'id');
     }
+
+    //调用该函数时，需先通过 xxModel::get($id) 或者 new xxModel 创建 model对象。
+    public function easySave($img_url=null, $order=null, $product_id){
+
+        if($img_url != null)             $data['img_url'] = $img_url;
+        if($order != null)                $data['order']= $order;
+        if($product_id != null)            $data['product_id']= $product_id;
+
+        return $this->save($data);
+    }
+
 }

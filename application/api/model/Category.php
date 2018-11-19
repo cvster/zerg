@@ -11,10 +11,10 @@ class Category extends BaseModel
         return $this->hasMany('Product', 'category_id', 'id');
     }
 
-    public function img()
-    {
-        return $this->belongsTo('Image', 'topic_img_id', 'id');
-    }
+//    public function img()
+//    {
+//        return $this->belongsTo('Image', 'topic_img_id', 'id');
+//    }
 
     public static function getCategories($ids)
     {
@@ -35,8 +35,7 @@ class Category extends BaseModel
     //$num,每页显示的数量
     public function getCategoriesByPage($num)
     {
-        $categories = self::with('products,img')
-            ->order('listorder')
+        $categories = self::order('listorder')//with('products,img')
             ->paginate($num);
         return $categories;
     }
@@ -44,19 +43,19 @@ class Category extends BaseModel
     //$num,每页显示的数量
     public function getAllCategories()
     {
-        $categories = self::with('products,img')
+        $categories = self::with('products')
             ->order('listorder')->select();
         return $categories;
     }
 
-
-    public function easySave($name=null, $topic_img_id=null){
+    //调用该函数时，需先通过 xxModel::get($id) 或者 new xxModel 创建 model对象。
+    public function easySave($name=null, $img_url=null){
         //不能用$this->name = $name; $this->save(),因为这样$this->name改变的是category类的name
 
         if($name != null)
             $data['name'] = $name;
-        if($topic_img_id != null)
-            $data['topic_img_id']= $topic_img_id;
+        if($img_url != null)
+            $data['img_url']= $img_url;
 
         return $this->save($data);
     }

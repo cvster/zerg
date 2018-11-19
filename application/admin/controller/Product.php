@@ -13,6 +13,7 @@ use think\Controller;
 use app\api\model\Product as ProductModel;
 use app\api\model\Category as CategoryModel;
 use app\api\validate\Product as ProductValidate;
+use app\api\model\ProductImage as ProductImageModel;
 
 class Product extends Controller
 {
@@ -32,23 +33,20 @@ class Product extends Controller
         $productValidate = new ProductValidate();
         $data = [ 'id'=>$id, 'listorder'=>$listorder ];
         if(!$productValidate->scene('listorder')->check($data)){
-            return jsonResult(0,'参数错误');
+            return codeResult(0,'参数错误');
         }
 
         $product = ProductModel::get($id);
         if($product->listorder == $listorder)
             $this->result($_SERVER['HTTP_REFERER'], 2,'listorder not change');
-        ///$_SERVER['HTTP_REFERER']是教程里面用来刷新页面的，这里没啥用
 
         $product->listorder = $listorder;
         $res = $product->save();
-        //$categoryModel = new CategoryModel();
-        //$res = $categoryModel->save(['order'=>$listorder], ['id'=>$id]);//save两个参数表示更新，第一个是更新的字段，第二个是where
-        return resResult($res,'更新成功','更新失败');
+        return boolResult($res,'更新成功','更新失败');
     }
 
 
-    public function add()//todo 这个还没改
+    public function add()
     {
         $categoryModel = new CategoryModel();
         $categories =$categoryModel->getAllCategories();
@@ -62,8 +60,8 @@ class Product extends Controller
         //todo 需要加validate
         $product = ProductModel::getProductDetail($id);
         $categoryModel = new CategoryModel();
-        $categories =$categoryModel->getAllCategories();
-        $imgs = $product->imgs;
+        $categories =$categoryModel->getAllCategories();//获取所有category供编辑时选择
+        $imgs = $product->imgs;//商品详情图片,hasMany 'ProductImage'
         return $this->fetch('product/edit',['product'=>$product, 'categories'=>$categories, 'imgs'=>$imgs]);
     }
 
@@ -71,42 +69,73 @@ class Product extends Controller
     //添加分类时在这里保存,表单提交的形式是post。
     public function save()
     {
-        //todo: 刚复制过来
+        //todo 加validate
         $data = input('post.');
-        $id = $data['id'];
-        if($data['name'] == '')
-            $this->error('分类名不能为空');
 
         //id = -1表示新增, 不等于-1表示编辑
-        if($id == -1)
+        if($data['id'] == -1)
             return $this->addSave($data);
         else
-            return $this->editSave($data, $id);
+            return $this->editSave($data, $data['id']);
     }
 
     protected function addSave($data){
+        //保存商品主图
         $mainImg = request()->file('file');
-        if(!$mainImg) return jsonResult(0,'未选择商品主图');
+        if(!$mainImg) return codeResult(0,'未选择商品主图');
         $mainImgPath=moveImg($mainImg);
 
-        $detailImgs = request()->file('files');
-        foreach($detailImgs as $detailImg){
-            echo 'aa';
-        }
+        //存储数据库
+        $product = new ProductModel();
+        unset($data['id']);
+        $data['main_img_url'] = $mainImgPath;
+        $res = $product->allowField(true)->save($data);
+        if(!$res) return codeResult(0, '数据库存储异常');
 
-        if(!$detailImgs) return jsonResult(0,'未选择商品详情');
+        //如果有商品详情图片，则存储
+        $detailImgs = request()->file('files');
+        if($detailImgs){
+            foreach ($detailImgs as $index => $detailImg) {
+                $detailImgPath = moveImg($detailImg);
+                $productImageModel = new ProductImageModel();
+                $productImageModel->easySave($detailImgPath,$index,$product->id);
+            }
+        }
+        return codeResult(1,'保存成功');
     }
 
+    protected function editSave($data)
+    {
+        $product = ProductModel::where('id',$data['id'])->with('imgs')->find();//find返回结果是单个对象，select返回结果是数组
 
+        //存储main_img
+        $mainImg = request()->file('file');//这里需要判断是不是有文件，没有的话就用原来的图片，有的话就用新的图片，并删掉原来的。
+        if($mainImg){
+            $data['main_img_url'] = moveImg($mainImg);//保存新的主图片
+            tryDelete($product->main_img_url);//删除旧的主图片
+        }
 
-//    public function add()
-//    {
-//        echo $this->fetch();
-//    }
+        //保存product信息，（除detailImgs之外的）
+        $res = $product->allowField(true)->save($data);
+        if(!$res)  return codeResult(0,'数据库存储时产生异常');
 
-//    public function save()
-//    {
-//        return input('post.');
-//    }
+        //保存detailImgs信息并删除旧的detailImgs
+        $detailImgs = request()->file('files');
+        if($detailImgs){
+            $oldDetailimgs = ProductImageModel::where('product_id',$product->id)->select();
+            //删除旧的detailImgs
+            foreach($oldDetailimgs as $oldDetailimg){
+                tryDelete($oldDetailimg->img_url);
+                $oldDetailimg->delete();
+            }
+            //保存新的detailImgs
+            foreach ($detailImgs as $index => $detailImg) {
+                $detailImgPath = moveImg($detailImg);
+                $productImageModel = new ProductImageModel();
+                $productImageModel->easySave($detailImgPath,$index,$product->id);
+            }
+        }
+        return codeResult(1,'保存成功');
+    }
 
 }
