@@ -97,6 +97,6 @@ Route::post('api/:version/message/delivery', 'api/:version.Message/sendDeliveryM
 //});
 
 
-// admin后台管理
-Route::get('admin', 'admin/index/index');
-Route::get('admin/login', 'admin/index/login');
+// admin后台管理，这里定义了简化路由的话，redirect会出问题
+//Route::get('user/admin', 'admin/index/index');
+//Route::get('user/login', 'admin/index/login');

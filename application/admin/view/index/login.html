@@ -19,20 +19,22 @@
 <script>DD_belatedPNG.fix('*');</script>
 <![endif]-->
 <title>后台登录 - H-ui.admin v3.1</title>
-<meta name="keywords" content="H-ui.admin v3.1,H-ui网站后台模版,后台模版下载,后台管理系统模版,HTML后台模版下载">
-<meta name="description" content="H-ui.admin v3.1，是一款由国人开发的轻量级扁平化网站后台模板，完全免费开源的网站后台管理系统模版，适合中小型CMS后台系统。">
+<meta name="keywords" content="H-ui.admin v3.1">
+<meta name="description" content="H-ui.admin v3.1">
 </head>
 <body>
 <input type="hidden" id="TenantId" name="TenantId" value="" />
 <!--<div class="header"></div>-->
 <div class="loginWraper">
-  <div id="loginform" class="loginBox">
-    <form class="form form-horizontal" action="index.html" method="post">
+  <div class="loginBox">
+
+      <!--<form id="loginForm" class="form form-horizontal" method="post" action="##" onsubmit="return false">-->
+    <form id="loginForm" class="form form-horizontal" method="post">
 
       <div class="row cl">
         <label class="form-label col-xs-3"><i class="Hui-iconfont">&#xe60d;</i></label>
         <div class="formControls col-xs-8">
-          <input id="username" name="username" type="text" placeholder="用户名" class="input-text size-L">
+          <input id="username" name="username" type="text" placeholder="用户名" class="input-text size-L" required>
         </div>
       </div>
 
@@ -68,26 +70,77 @@
   </div>
 </div>
 <div class="footer">Copyright Zerg by H-ui.admin v3.1</div>
-<script type="text/javascript" src="__STATIC__/hui3.1/lib/jquery/1.9.1/jquery.min.js"></script>
-<script type="text/javascript" src="__STATIC__/hui3.1/static/h-ui/js/H-ui.min.js"></script>
+
+{include file="public/footer" /}
+
+
+
 
 <script>
-  <!---->
-//  //先尝试从cookie中获取用户名
-//  $(document).ready(function() {
-//      if($.cookie('username')){
-//          $("#username").val( $.cookie('username') );
-//          $("#rememberMe").prop("checked",true);
-//      }
-//  });
-//
-//
-//  $("#submit").click(function(){
-//      if($("#rememberMe").prop('checked') ){
-//          console.log('remember me');
-//          $.cookie("username", $("#username").val() , { path: '/', expires: 360 });
-//      }
-//  });
+
+  $(document).ready(function() {
+
+      //将保存在cookie里的登录名填到表格中
+      if($.cookie('username')){
+          $("#username").val( $.cookie('username') );
+          $("#rememberMe").prop("checked",true);
+      }
+
+      //表单提交ajaxSubmit参数设置
+      var formOptions = {
+          url: 			"{:url('index/loginGrantToken')}" ,//url
+          type: 			"POST",			//方法类型
+          dataType: 		"json",      // 'xml', 'script', or 'json' (期望服务端返回数据的类型.)
+          resetForm: 	    false,        // 成功提交后，是否重置所有的表单元素的值.
+          timeout:   		3000,
+          beforeSerialize: modifySubmitData,  //提交之前对用户密码进行md5+日期加密
+          error: 			function() { toastr.error(result.msg); },
+          success:    	    function(result) {
+              if (result.code == 1) {
+                  window.location.href = "{:url('index')}";
+              }
+              if (result.code == 0) {
+                  layer.alert(result.msg);
+              }
+          }
+      };
+
+
+      //绑定表单验证和提交
+      $("#loginForm").validate({
+//      rules:{file: "required",},
+//      messages:{ file: "请选择图片",},
+          submitHandler: function(form)
+          {
+              $(form).ajaxSubmit(formOptions);
+              return false;
+          }
+      });
+
+      //
+
+  });
+
+  $("#submit").click(function(){
+      if($("#rememberMe").prop('checked') ){
+          $.cookie("username", $("#username").val() , { path: '/', expires: 360 });
+      }
+  });
+  function modifySubmitData() {
+      //组装发送的表单值之前修改某些字段的值。在Action/Controller中真正接收的值。
+      var date = getServerDate();
+//      formatDateToStringYMD($date);
+      var password = $("#password").val();
+//      console.log($("#password").val()+formatDateToStringYMD(date));
+      var md5DatePassword = $.md5( $.md5(password) + formatDateToStringYMD(date) );
+      $("#password").val(md5DatePassword);
+  }
+
+  function getServerDate(){
+      return new Date($.ajax({async: false}).getResponseHeader("Date"));
+  }
+
+
 
 </script>
 

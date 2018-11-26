@@ -24,6 +24,7 @@ class Category extends BaseAdminController
 
     public function _initialize()
     {
+        $this->checkAuth();//检查管理员身份
         $this->categoryModel = new CategoryModel();
         parent::_initialize();
     }
@@ -117,18 +118,13 @@ class Category extends BaseAdminController
             $data = input('post.');
             $id = $data['id'];
             $category = CategoryModel::get($id);
-            $image = ImageModel::get($category->topic_img_id);
-            $imagePath = $_SERVER['DOCUMENT_ROOT'].$image->url;
+            $imagePath = $category->img_url;
 
             $res = CategoryModel::destroy(intval($category->id));
             if(!$res)  return codeResult(0,'删除失败');
 
-            try{
-                ImageModel::destroy(intval($image->id));
-                unlink($imagePath);
-            }catch (\Exception $e){
-                return codeResult(0,'分类删除成功,但是分类图片删除失败');
-            }
+            if(!tryDelete($imagePath))
+                return codeResult(1,'分类删除成功,但是分类图片删除失败');
 
             return codeResult(1,'删除成功');
         }

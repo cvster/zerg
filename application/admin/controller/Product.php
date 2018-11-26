@@ -15,8 +15,14 @@ use app\api\model\Category as CategoryModel;
 use app\api\validate\Product as ProductValidate;
 use app\api\model\ProductImage as ProductImageModel;
 
-class Product extends Controller
+class Product extends BaseAdminController
 {
+
+    public function _initialize(){
+        //判断用户是否已经登录
+        $this->checkAuth();
+    }
+
     public function index()
     {
         $productsModel = new ProductModel();
@@ -38,7 +44,7 @@ class Product extends Controller
 
         $product = ProductModel::get($id);
         if($product->listorder == $listorder)
-            $this->result($_SERVER['HTTP_REFERER'], 2,'listorder not change');
+            return codeResult(7,'排序未改变');//返回code为7，前端不处理
 
         $product->listorder = $listorder;
         $res = $product->save();
@@ -122,11 +128,11 @@ class Product extends Controller
         //保存detailImgs信息并删除旧的detailImgs
         $detailImgs = request()->file('files');
         if($detailImgs){
-            $oldDetailimgs = ProductImageModel::where('product_id',$product->id)->select();
+            $oldDetailImgs = ProductImageModel::where('product_id',$product->id)->select();
             //删除旧的detailImgs
-            foreach($oldDetailimgs as $oldDetailimg){
-                tryDelete($oldDetailimg->img_url);
-                $oldDetailimg->delete();
+            foreach($oldDetailImgs as $oldDetailImg){
+                tryDelete($oldDetailImg->img_url);
+                $oldDetailImg->delete();
             }
             //保存新的detailImgs
             foreach ($detailImgs as $index => $detailImg) {

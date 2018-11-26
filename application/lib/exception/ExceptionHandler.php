@@ -24,7 +24,18 @@ class ExceptionHandler extends Handle
 
     public function render(Exception $e)
      {
-        if ($e instanceof BaseException)
+         //用CodeException来返回一个codeResult.
+         if ($e instanceof CodeException)
+         {
+            $result=[
+                'code' => $e->resultCode,
+                'msg' => $e->resultMsg,
+                'data' => $e->resultData
+            ];
+             return json($result, $e->httpCode);
+         }
+
+         if ($e instanceof BaseException)
         {
             //如果是自定义异常，则控制http状态码，不需要记录日志
             //因为这些通常是因为客户端传递参数错误或者是用户请求造成的异常

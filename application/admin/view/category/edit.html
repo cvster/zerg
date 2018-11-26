@@ -59,14 +59,17 @@
 
         //ajaxSubmit参数设置
         var formOptions = {
-            target:        '#output1',   // 用服务器返回的数据 更新 id为output1的内容.
             url: 			"{:url('Category/save')}" ,//url
             type: 			"POST",			//方法类型
             dataType: 		"json",      // 'xml', 'script', or 'json' (接受服务端返回的类型.)
             resetForm: 	false,        // 成功提交后，是否重置所有的表单元素的值.
             timeout:   		3000,
             error: 			function() { toastr.error(result.msg); },
-            success:    	echoResult,
+            success:    	function (result) {
+                				echoResult(result);
+                				if(result.code == 1)
+                                    parent.location.reload();
+            },
         };
 
 
@@ -91,20 +94,6 @@
         layer_close();
     }
 
-
-    //当服务器返回结果为json形式时，{code，msg，data}
-    //如果code=1则用toastr.success显示成功消息并刷新父页面，如果code=0，则用toastr.error显示失败消息
-    function echoResult(result) {
-        //console.log(result);//打印服务端返回的数据(调试用)
-        toastr.options={timeout:5000, positionClass: "toast-top-center"};
-        if (result.code == 1) {
-            toastr.success("保存成功");
-            parent.location.reload();
-        }
-        if (result.code == 0) {
-            toastr.error('警告：'+result.msg);
-        }
-    }
 
 </script>
 

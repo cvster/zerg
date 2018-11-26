@@ -9,50 +9,35 @@
 namespace app\admin\controller;
 
 
+use app\lib\exception\CodeException;
 use think\Controller;
 use think\Request;
 
 class BaseAdminController extends Controller
 {
-    //设置默认返回类型为html，在模块下面的config.php里设置了，这里注释掉
+    //所有admin的controller都从这里走一下initialize
     public function _initialize(){
-//        \think\Config::set('default_return_type', 'html');
+//        \think\Config::set('default_return_type', 'html');//设置默认返回类型为html，在模块下面的config.php里设置了，这里注释掉
     }
 
-    //用result返回数据时，设置默认返回为json，不然有时候会报错。
-    public function result($data, $code = 0, $msg = '', $type = '', array $header = [])
+
+    // 检查管理员身份，查看cookie中Token是否有效
+    public function checkAuth()
     {
-        \think\Config::set('default_return_type', 'json');
-        parent::result($data, $code, $msg, $type, $header);
-    }
-
-
-    //回复操作成功和操作失败的提示
-    public function echoResultResponse($res){
-        if($res)
-            $this->success('操作成功');
+        $cookieAdminToken = cookie('adminToken');
+        $cacheAdminToken = cache('adminToken');
+        if($cookieAdminToken = $cacheAdminToken)
+        {
+            return true;
+        }
         else
-            $this->error('操作失败');
+        {
+            //这里之所以要throw Exception，是因为如果return的话，调用它的函数还要return，不方便，所以用throw Exception，
+            //在全局异常处理函数中，CodeException就return一个json的result，没干别的事。
+            $this->redirect('admin/index/login');//如果前端不是ajax请求，则直接redirect。如果是，则下面return一个codeException
+            throw new CodeException(3,'登录过期或失效，请重新登录',null,302);
+
+        }
 
     }
-
-    public function echoResultMsg($res){
-        if($res)
-            echo '   操作成功   ';
-        else
-
-            echo '   操作失败   ';
-    }
-
-    //设置 $this->success 和 $this->error 的等待时间为2
-    public function success($msg = '', $url = null, $data = '', $wait = 1, array $header = [])
-    {
-        parent::success($msg,$url,$data,$wait,$header);
-    }
-
-    public function error($msg = '', $url = null, $data = '', $wait = 1, array $header = [])
-    {
-        parent::error($msg.$url,$data,$wait,$header);
-    }
-
 }

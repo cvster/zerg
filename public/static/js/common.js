@@ -47,3 +47,52 @@ function getObjectURL(file) {
     }
     return url ;
 }
+
+
+
+function formatDateToString(time) {
+    var date=new Date(time);
+    var y = date.getFullYear();
+    var m = date.getMonth() + 1;
+    var d = date.getDate();
+    var hour = date.getHours().toString();
+    var minutes = date.getMinutes().toString();
+    var seconds = date.getSeconds().toString();
+    if (hour < 10) {
+        hour = "0" + hour;
+    }
+    if (minutes < 10) {
+        minutes = "0" + minutes;
+    }
+    if (seconds < 10) {
+        seconds = "0" + seconds;
+    }
+    return  y + '-' + (m < 10 ? ('0' + m) : m) + '-' + (d < 10 ? ('0' + d) : d) + " " + hour + ":" + minutes + ":" + seconds;
+}
+
+
+function formatDateToStringYMD(time) {
+    var date=new Date(time);
+    var y = date.getFullYear();
+    var m = date.getMonth() + 1;
+    var d = date.getDate();
+    return  y + '-' + (m < 10 ? ('0' + m) : m) + '-' + (d < 10 ? ('0' + d) : d);
+}
+
+
+//当服务器返回结果为json形式时，{code，msg，data}
+//如果code=1则用toastr.success显示成功消息并刷新父页面，如果code=0，则用toastr.error显示失败消息
+function echoResult(result) {
+    //console.log(result);//打印服务端返回的数据(调试用)
+    toastr.options={timeout:5000, positionClass: "toast-top-center"};
+    if (result.code == 1) {
+        toastr.success("保存成功");
+    }
+    if (result.code == 0) {
+        toastr.error('警告：'+result.msg);
+    }
+    if(result.code == 3){
+        toastr.warning(result.msg);
+        window.location.href = "{:url('user/admin')}";
+    }
+}
