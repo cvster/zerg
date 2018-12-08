@@ -1,7 +1,19 @@
-application下面有两个模块，api和admin
-    api中，model提供数据库访问，集成了一些方法；
-    controller接收url，校验输入参数，然后调用model层的方法读写数据，并返回给调用者；
-    有时候业务比较复杂，controller不直接调用model层，而是调用service层，再由service层调用model层。
+1.结构说明
+    application下面有两个模块，api和admin
+        api中，model提供数据库访问，集成了一些方法；
+        controller接收url，校验输入参数，然后调用model层的方法读写数据，并返回给调用者；
+        有时候业务比较复杂，controller不直接调用model层，而是调用service层，再由service层调用model层。
 
     admin中，controller接收url，调用api模块中的controller层的方法处理业务；
-    并且提供view模板文件，将业务数据和view模板通过this-fecth()返回;
+        并且提供view模板文件，将业务数据和view模板通过this-fecth()返回;
+
+    admin模块中默认的返回类型配置为html，在admin/config.php中配置。
+
+    admin返回给网页前端的json类数据，统一设定形式为{code,msg,data[]},网页前端首先调用common.js中的handleResult统一处理，再自己处理。
+        后台返回函数有codeResult，resResult,以及CodeException.
+
+2. 配置文件及注意事项
+    config('setting.img_prefix') 是application/extra/setting.php里面的img_prefix
+    config('setting.img_prefix') 应配置为网站的url
+    category表中默认应该有至少一种category，否则可能会出错。应在创建表的时候设置一个默认分类，避免出错。
+

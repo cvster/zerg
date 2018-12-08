@@ -96,13 +96,11 @@
           beforeSerialize: modifySubmitData,  //提交之前对用户密码进行md5+日期加密
           error: 			function() { toastr.error(result.msg); },
           success:    	    function(result) {
-              if (result.code == 1) {
-                  window.location.href = "{:url('index')}";
-              }
-              if (result.code == 0) {
-                  layer.alert(result.msg);
-              }
-          }
+                                  handleResult(result);
+                                  if (result.code == 1) {
+                                      window.location.href = "{:url('admin/index/index')}";
+                                  }
+                              }
       };
 
 

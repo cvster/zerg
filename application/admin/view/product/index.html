@@ -72,24 +72,20 @@
     function deleteProduct(productId) {
         layer.confirm('确认要删除吗？',function(index){
             $.ajax({
-                type: "POST",//方法类型
-//                dataType: "json",//预期服务器返回的数据类型
-                url: "{:url('Product/delete')}" ,
-                data: { id: productId},
-                success: function (result) {
-//                    console.log(result);//打印服务端返回的数据(调试用)
-                    if (result.code == 1) {
-                        parent.parent.toastr.success("删除成功");
-                        window.location.reload();
-                    }
-                    else{
-                        parent.toastr.error(result.msg);
-                        window.location.reload();
-					}
-                },
+                type: 		"POST",//方法类型
+                dataType: 	"json",//预期服务器返回的数据类型
+                url: 		"{:url('Product/delete')}" ,
+                data: 		{ id: productId},
+                success:   function (result) {
+                    			handleResult(result);
+								//删除成功后刷新页面
+								if (result.code == 1) {
+									window.location.reload();
+								}
+							},
                 error : function() {
-                    toastr.error("服务器异常，保存失败");
-                }
+							toastr.error("服务器异常，保存失败");
+						}
             });
             layer.close(index);
         });

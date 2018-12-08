@@ -26,7 +26,7 @@ class BaseAdminController extends Controller
     {
         $cookieAdminToken = cookie('adminToken');
         $cacheAdminToken = cache('adminToken');
-        if($cookieAdminToken = $cacheAdminToken)
+        if($cookieAdminToken!= null && $cookieAdminToken == $cacheAdminToken)
         {
             return true;
         }
@@ -35,7 +35,7 @@ class BaseAdminController extends Controller
             //这里之所以要throw Exception，是因为如果return的话，调用它的函数还要return，不方便，所以用throw Exception，
             //在全局异常处理函数中，CodeException就return一个json的result，没干别的事。
             $this->redirect('admin/index/login');//如果前端不是ajax请求，则直接redirect。如果是，则下面return一个codeException
-            throw new CodeException(3,'登录过期或失效，请重新登录',null,302);
+            throw new CodeException(11,'登录过期或失效，请重新登录',null,302);//code=11在common.js中统一处理。
 
         }
 

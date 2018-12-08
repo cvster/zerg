@@ -63,7 +63,7 @@ class Pay
         $wxOrderData->SetOut_trade_no($this->orderNo);
         $wxOrderData->SetTrade_type('JSAPI');
         $wxOrderData->SetTotal_fee($totalPrice * 100);
-        $wxOrderData->SetBody('零食商贩');
+        $wxOrderData->SetBody('lingshishangfan');
         $wxOrderData->SetOpenid($openid);
         $wxOrderData->SetNotify_url(config('secure.pay_back_url'));
 
@@ -78,7 +78,7 @@ class Pay
         if($wxOrder['return_code'] != 'SUCCESS' || $wxOrder['result_code'] !='SUCCESS'){
             Log::record($wxOrder,'error');
             Log::record('获取预支付订单失败','error');
-//            throw new Exception('获取预支付订单失败');
+            throw new Exception('获取预支付订单失败');
         }
         $this->recordPreOrder($wxOrder);
         $signature = $this->sign($wxOrder);

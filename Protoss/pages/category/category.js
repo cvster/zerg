@@ -23,9 +23,13 @@ Page({
       that.getProductsByCategory(categoryData[0].id,(data)=>{
         var dataObj= {
           procucts: data,
-          topImgUrl: categoryData[0].img.url,
+          // topImgUrl: categoryData[0].img.url,
+          topImgUrl: categoryData[0].img_url,
           title: categoryData[0].name
         };
+        console.log(dataObj);
+        console.log(categoryData[0]);
+        
         that.setData({
           loadingHidden: true,
           categoryInfo0:dataObj
@@ -67,7 +71,8 @@ Page({
       if(item==arr[index]) {
         obj['categoryInfo' + item]={
           procucts:data,
-          topImgUrl:baseData.img.url,
+          // topImgUrl: baseData.img.url,
+          topImgUrl: baseData.img_url,
           title:baseData.name
         };
 

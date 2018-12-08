@@ -80,19 +80,35 @@ function formatDateToStringYMD(time) {
 }
 
 
-//当服务器返回结果为json形式时，{code，msg，data}
-//如果code=1则用toastr.success显示成功消息并刷新父页面，如果code=0，则用toastr.error显示失败消息
-function echoResult(result) {
+//服务器返回的结果形式统一定义为一个json数组{code，msg，data}
+//先调用该函数进行一个统一处理。
+//----通常返回的code为0或1，表示成功或失败，这里用 toastr.success 和 toastr.error 显示服务器的msg。
+//----特殊情况下返回的code不是0和1，在此统一处理。
+function handleResult(result) {
     //console.log(result);//打印服务端返回的数据(调试用)
-    toastr.options={timeout:5000, positionClass: "toast-top-center"};
-    if (result.code == 1) {
-        toastr.success("保存成功");
-    }
+    // toastr.options={timeout:2000, positionClass: "toast-top-center"};
+
+    // code=0，表示操作失败，用toastr.error显示失败消息，不刷新页面
     if (result.code == 0) {
         toastr.error('警告：'+result.msg);
     }
-    if(result.code == 3){
+
+    // code=1表示操作成功，用toastr.success显示成功消息并刷新父页面 (用于layer弹窗的编辑页面)
+    if (result.code == 1) {
+        toastr.success("保存成功");
+        parent.location.reload();
+    }
+
+    // // code=2，表示登录成功，跳转至index
+    // if(result.code == 2){
+    //     toastr.success(result.msg);
+    //     window.location.href = "{:url('admin/index/index')}";
+    // }
+
+    // code=11，表示未登录或身份验证过期，跳转至login界面。在BaseAdmincontroller的checkAuth()方法中返回code=11
+    if(result.code == 11){
         toastr.warning(result.msg);
-        window.location.href = "{:url('user/admin')}";
+        window.location.href = "{:url('admin/index/login')}";
     }
 }
+

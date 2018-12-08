@@ -29,8 +29,7 @@ class BaseModel extends Model
         if($module_name == 'admin')
             return $finalUrl;
 
-
-        if($data['from'] == 1){
+        if($module_name == 'api'){
             $finalUrl = config('setting.img_prefix').$value;
         }
         return $finalUrl;

@@ -7,7 +7,8 @@
     "pages/theme/theme",
     "pages/product/product",
     "pages/order/order",
-    "pages/pay-result/pay-result"
+    "pages/pay-result/pay-result",
+    "pages/login/login"
   ],
   "window":{
     "navigationBarTitleText": "",
@@ -24,7 +25,7 @@
         "selectedIconPath":"imgs/toolbar/home@selected.png",
         "text":"主页"
       },{
-        "pagePath":"pages/category/category",
+        "pagePath": "pages/category/category",
         "iconPath":"imgs/toolbar/category.png",
         "selectedIconPath":"imgs/toolbar/category@selected.png",
         "text":"分类"

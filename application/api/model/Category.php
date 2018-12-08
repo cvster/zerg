@@ -16,6 +16,10 @@ class Category extends BaseModel
 //        return $this->belongsTo('Image', 'topic_img_id', 'id');
 //    }
 
+    public function getImgUrlAttr($value, $data){
+        return $this->prefixImgUrl($value, $data);
+    }
+
     public static function getCategories($ids)
     {
         $categories = self::with('products')

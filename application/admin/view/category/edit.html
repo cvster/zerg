@@ -66,10 +66,11 @@
             timeout:   		3000,
             error: 			function() { toastr.error(result.msg); },
             success:    	function (result) {
-                				echoResult(result);
+                				toastr.options={timeout:2000, positionClass: "toast-top-center"};
+                				handleResult(result);
                 				if(result.code == 1)
                                     parent.location.reload();
-            },
+           					 },
         };
 
 

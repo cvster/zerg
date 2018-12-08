@@ -19,7 +19,7 @@
 				<select class="select" id="category_id" name="category_id">
 					<!--<option value="0">一级分类</option>-->
 				  	{volist name="categories" id="vo"}
-					<option value="{$vo.id}" {if condition="$product.id eq $vo.id"} selected="selected"{/if}>--{$vo.name}--</option>
+					<option value="{$vo.id}" {if condition="$product.id eq $vo.id"} selected="selected"{/if}>{$vo.name}</option>
 					{/volist}
 				</select>
 				</span>
@@ -121,19 +121,13 @@
             resetForm: false,        // 成功提交后，是否重置所有的表单元素的值.
             timeout:   3000,
             success:       function (result) {
-                console.log(result);//打印服务端返回的数据(调试用)
-                if (result.code == 1) {
-                    toastr.options={timeout:5000, positionClass: "toast-top-center"};
-                    toastr.success("保存成功");
-                    parent.location.reload();
-                }
-                if (result.code == 0) {
-                    toastr.error('警告：'+result.msg);
-                }
-            },
-            error : function() {
-                toastr.error(result.msg);
-            },
+                				handleResult(result);
+								if (result.code == 1)ro
+									parent.location.reload();
+							},
+            error : 		function() {
+								toastr.error(result.msg);
+							},
         };
 
 

@@ -16,28 +16,46 @@ Page({
     },
     onLoad:function(){
         this._loadData();
-        this._getAddressInfo();
     },
 
     onShow:function(){
-        //更新订单,相当自动下拉刷新,只有  非第一次打开 “我的”页面，且有新的订单时 才调用。
-        var newOrderFlag=order.hasNewOrder();
-        if(this.data.loadingHidden &&newOrderFlag){
-            this.onPullDownRefresh();
-        }
+      var userinfo = wx.getStorageSync('userinfo');
+      if (!userinfo){
+        wx.navigateTo({
+          url: '../login/login'
+        });
+        return
+      }
+      else{
+        var that = this;
+        my.getUserInfo((data) => {
+          that.setData({
+            userInfo: data
+          });
+        });
+        this._getOrders();
+        this._getAddressInfo();
+      }
+      //更新订单,相当自动下拉刷新,只有  非第一次打开 “我的”页面，且有新的订单时 才调用。
+      var newOrderFlag = order.hasNewOrder();
+      if (this.data.loadingHidden && newOrderFlag) {
+        this.onPullDownRefresh();
+      }
+      console.log('onShow End');
     },
 
     _loadData:function(){
-        var that=this;
-        my.getUserInfo((data)=>{
-            that.setData({
-                userInfo:data
-            });
 
-        });
+        // var that=this;
+        // my.getUserInfo((data)=>{
+        //     that.setData({
+        //         userInfo:data
+        //     });
 
-        this._getOrders();
-        order.execSetStorageSync(false);  //更新标志位
+        // });
+
+        
+        order.execSetStorageSync(true);  //更新标志位
     },
 
     /**地址信息**/

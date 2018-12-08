@@ -13,10 +13,12 @@ class My extends Base{
         var that=this;
         wx.login({
             success: function () {
+                console.log('login ---------------------------');
+
                 wx.getUserInfo({
                     success: function (res) {
+                      console.log('getUserInfo success ---------------------------');
                         typeof cb == "function" && cb(res.userInfo);
-
                         //将用户昵称 提交到服务器
                         if(!that.onPay) {
                             that._updateUserInfo(res.userInfo);
@@ -24,6 +26,7 @@ class My extends Base{
 
                     },
                     fail:function(res){
+                      console.log('getUserInfo failed ---------------------------');
                         typeof cb == "function" && cb({
                             avatarUrl:'../../imgs/icon/user@default.png',
                             nickName:'零食小贩'

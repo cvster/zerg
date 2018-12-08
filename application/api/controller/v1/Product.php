@@ -103,15 +103,10 @@ class Product extends Controller
     {
         (new Count())->goCheck();
         $products = ProductModel::getMostRecent($count);
-        if ($products->isEmpty())
-        {
-
-        }
-        $products = $products->hidden(
-            [
-                'summary'
-            ])
-            ->toArray();
+//        if ($products->isEmpty())
+//        {
+//        }
+        //$products = $products->toArray();
         return $products;
     }
 
