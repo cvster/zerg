@@ -109,6 +109,15 @@ Page({
             }
         },
 
+        /*取消订单*/
+        cancelOrder: function () {
+          if (this.data.orderStatus == 0) {
+            this._firstTimePay();
+          } else {
+            this._oneMoresTimePay();
+          }
+        },
+
         /*第一次支付*/
         _firstTimePay:function(){
             var orderInfo=[],

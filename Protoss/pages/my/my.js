@@ -1,10 +1,12 @@
+let App = getApp();
+
 import {Address} from '../../utils/address.js';
 import {Order} from '../order/order-model.js';
-import {My} from '../my/my-model.js';
+// import {My} from '../my/my-model.js';
 
 var address=new Address();
 var order=new Order();
-var my=new My();
+// var my=new My();
 
 Page({
     data: {
@@ -19,16 +21,12 @@ Page({
     },
 
     onShow:function(){
-      var userinfo = wx.getStorageSync('userinfo');
-      if (!userinfo){
-        wx.navigateTo({
-          url: '../login/login'
-        });
-        return
-      }
-      else{
+      App.checkLogin();
+
+      if (!this.data.userInfo)
+      {
         var that = this;
-        my.getUserInfo((data) => {
+        this.getUserInfo((data) => {
           that.setData({
             userInfo: data
           });
@@ -36,6 +34,7 @@ Page({
         this._getOrders();
         this._getAddressInfo();
       }
+
       //更新订单,相当自动下拉刷新,只有  非第一次打开 “我的”页面，且有新的订单时 才调用。
       var newOrderFlag = order.hasNewOrder();
       if (this.data.loadingHidden && newOrderFlag) {
@@ -45,16 +44,6 @@ Page({
     },
 
     _loadData:function(){
-
-        // var that=this;
-        // my.getUserInfo((data)=>{
-        //     that.setData({
-        //         userInfo:data
-        //     });
-
-        // });
-
-        
         order.execSetStorageSync(true);  //更新标志位
     },
 
@@ -204,5 +193,52 @@ Page({
             }
         });
     },
+
+
+  //得到用户信息
+  getUserInfo:function(cb) {
+    var that = this;
+    wx.login({
+      success: function () {
+        console.log('login ---------------------------');
+
+        wx.getUserInfo({
+          success: function (res) {
+            console.log('getUserInfo success ---------------------------');
+            typeof cb == "function" && cb(res.userInfo);
+            //将用户昵称 提交到服务器
+            if (!that.onPay) {
+              that._updateUserInfo(res.userInfo);
+            }
+
+          },
+          fail: function (res) {
+            console.log('getUserInfo failed ---------------------------');
+            // typeof cb == "function" && cb({
+            //   avatarUrl: '../../imgs/icon/user@default.png',
+            //   nickName: '零食小贩'
+            // });
+          }
+        });
+      },
+
+    })
+  },
+
+    /*更新用户信息到服务器*/
+    _updateUserInfo:function(res) {
+    var nickName = res.nickName;
+    delete res.avatarUrl;  //将昵称去除
+    delete res.nickName;  //将昵称去除
+    var allParams = {
+      url: 'user/wx_info',
+      data: { nickname: nickName, extend: JSON.stringify(res) },
+      type: 'post',
+      sCallback: function (data) {
+      }
+    };
+    App.request(allParams);
+
+  },
 
 })

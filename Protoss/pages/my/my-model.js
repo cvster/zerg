@@ -1,6 +1,9 @@
 /**
  * Created by jimmy on 17/3/24.
  */
+
+let App = getApp();
+
 import {Base} from '../../utils/base.js'
 
 class My extends Base{
@@ -50,7 +53,7 @@ class My extends Base{
             sCallback: function (data) {
             }
         };
-        this.request(allParams);
+        App.request(allParams);
 
     }
 }

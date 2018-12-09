@@ -7,15 +7,14 @@ import { Config } from 'config.js';
 class Base {
     constructor() {
         "use strict";
-        this.baseRestUrl = Config.restUrl;
-        this.debugUrl = Config.debugUrl;
+        // this.debugUrl = Config.debugUrl;
         this.onPay=Config.onPay;
     }
 
     //http 请求类, 当noRefech为true时，不做未授权重试机制
     request(params, noRefetch) {
         var that = this,
-          url = this.baseRestUrl + params.url;
+          url = Config.restUrl + params.url;
           if (url.indexOf("?") > -1)
             url = url + '&' + Config.debugUrl;
           else

@@ -8,6 +8,6 @@
 composer.lock
 .idea/
 
-#配置文件，要保密
-/application/extra/
-/application/database.php
+#配置文件，要保密,先不保密了。
+#/application/extra/
+#/application/database.php
