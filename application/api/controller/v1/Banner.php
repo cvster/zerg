@@ -20,7 +20,7 @@ use app\lib\exception\MissException;
 class Banner extends BaseController
 {
 //    protected $beforeActionList = [
-//        'checkPrimaryScope' => ['only' => 'getBanner']
+//        'checkUserOrAdminScope' => ['only' => 'getBanner']
 //    ];
 
     /**

@@ -25,7 +25,7 @@ use think\Exception;
 class Address extends BaseController
 {
     protected $beforeActionList = [
-        'checkPrimaryScope' => ['only' => 'createOrUpdateAddress,getUserAddress']
+        'checkUserOrAdminScope' => ['only' => 'createOrUpdateAddress,getUserAddress']
     ];
     
     /**

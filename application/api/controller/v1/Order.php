@@ -24,9 +24,8 @@ use think\Controller;
 class Order extends BaseController
 {
     protected $beforeActionList = [
-        'checkExclusiveScope' => ['only' => 'placeOrder'],
-        'checkPrimaryScope' => ['only' => 'getDetail,getSummaryByUser'],
-        'checkSuperScope' => ['only' => 'delivery,getSummary']
+        'checkUserOrAdminScope' => ['only' => 'getDetail,getSummaryByUser'],
+        'checkAdminScope' => ['only' => 'delivery,getSummary']
     ];
     
     /**
@@ -36,6 +35,7 @@ class Order extends BaseController
      */
     public function placeOrder()
     {
+        $this->checkUserScope();
         (new OrderPlace())->goCheck();
         $products = input('post.products/a');
         $uid = Token::getCurrentUid();
@@ -127,6 +127,20 @@ class Order extends BaseController
         if($success){
             return new SuccessMessage();
         }
+    }
+
+    /**
+     * @return post传入订单id，删除订单
+     */
+    public function cancel(){
+        (new IDMustBePositiveInt())->goCheck();
+        $id = input('post.id');
+        OrderService::checkOrderAuth($id);
+        $id = input('post.id');
+        $user = OrderModel::get($id);
+        $res = $user->delete();
+        if($res)
+            return new SuccessMessage();
     }
 }
 

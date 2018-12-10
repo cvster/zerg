@@ -17,7 +17,7 @@ Page({
         addressInfo:null
     },
     onLoad:function(){
-        this._loadData();
+      order.execSetStorageSync(true);  //更新标志位,如果为true，则onShow时会更新
     },
 
     onShow:function(){
@@ -25,12 +25,11 @@ Page({
 
       if (!this.data.userInfo)
       {
-        var that = this;
-        this.getUserInfo((data) => {
-          that.setData({
-            userInfo: data
-          });
+        var userinfo = JSON.parse(wx.getStorageSync('userinfo'));
+        this.setData({
+          userInfo: userinfo,
         });
+
         this._getOrders();
         this._getAddressInfo();
       }
@@ -41,10 +40,6 @@ Page({
         this.onPullDownRefresh();
       }
       console.log('onShow End');
-    },
-
-    _loadData:function(){
-        order.execSetStorageSync(true);  //更新标志位
     },
 
     /**地址信息**/
@@ -189,41 +184,33 @@ Page({
             content: content,
             showCancel:false,
             success: function(res) {
-
             }
         });
     },
 
 
-  //得到用户信息
-  getUserInfo:function(cb) {
-    var that = this;
-    wx.login({
-      success: function () {
-        console.log('login ---------------------------');
+  // //得到用户信息
+  // getUserInfo:function(cb) {
+  //   var that = this;
+  //   wx.login({
+  //     success: function () {
+  //       console.log('login ---------------------------');
 
-        wx.getUserInfo({
-          success: function (res) {
-            console.log('getUserInfo success ---------------------------');
-            typeof cb == "function" && cb(res.userInfo);
-            //将用户昵称 提交到服务器
-            if (!that.onPay) {
-              that._updateUserInfo(res.userInfo);
-            }
-
-          },
-          fail: function (res) {
-            console.log('getUserInfo failed ---------------------------');
-            // typeof cb == "function" && cb({
-            //   avatarUrl: '../../imgs/icon/user@default.png',
-            //   nickName: '零食小贩'
-            // });
-          }
-        });
-      },
-
-    })
-  },
+  //       wx.getUserInfo({
+  //         success: function (res) {
+  //           console.log('getUserInfo success ---------------------------');
+  //           console.log(res);
+  //           typeof cb == "function" && cb(res.userInfo);
+  //           //将用户昵称 提交到服务器
+  //           this._updateUserInfo(res.userInfo);
+  //         },
+  //         fail: function (res) {
+  //           console.log('getUserInfo failed ---------------------------');
+  //         }
+  //       });
+  //     },
+  //   })
+  // },
 
     /*更新用户信息到服务器*/
     _updateUserInfo:function(res) {

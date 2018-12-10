@@ -1,5 +1,6 @@
 //app.js
 import { Token } from 'utils/token.js';
+import { Config } from '/utils/config.js';
 
 App({
   onLaunch: function () {
@@ -56,6 +57,7 @@ App({
         var code = res.statusCode.toString();
         var startChar = code.charAt(0);
         if (startChar == '2') {
+          //状态码以2开头，表示成功，调用回调函数 sCallback
           params.sCallback && params.sCallback(res.data);
         } else {
           if (code == '401') {
@@ -64,6 +66,7 @@ App({
             }
           }
           that._processError(res);
+          //状态码以4开头，表示失败，调用回调函数 eCallback
           params.eCallback && params.eCallback(res.data);
         }
       },

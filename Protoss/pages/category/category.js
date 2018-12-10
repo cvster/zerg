@@ -2,9 +2,11 @@ import { Category } from 'category-model.js';
 var category=new Category();  //实例化 home 的推荐页面
 Page({
   data: {
-    transClassArr: ['tanslate0', 'tanslate1', 'tanslate2', 'tanslate3', 'tanslate4', 'tanslate5', 'tanslate6', 'tanslate7'],
+    // transClassArr: ['tanslate0', 'tanslate1', 'tanslate2', 'tanslate3', 'tanslate4', 'tanslate5', 'tanslate6', 'tanslate7'],
     currentMenuIndex:0,
     loadingHidden:false,
+    transDown:0,
+    allCategoryDetail:[],
   },
   onLoad: function () {
     this._loadData();
@@ -13,17 +15,29 @@ Page({
   /*加载所有数据*/
   _loadData:function(callback){
     var that = this;
-    category.getCategoryType((categoryData)=>{
+    category.getAllCategory((categoryData)=>{
 
       that.setData({
-        categoryTypeArr: categoryData,
-        loadingHidden: true
+        allCategoryArr: categoryData,
+        loadingHidden: true,
+        allCategoryDetail:categoryData,
       });
 
       that.getProductsByCategory(categoryData[0].id,(data)=>{
         var dataObj= {
           procucts: data,
-          // topImgUrl: categoryData[0].img.url,
+          topImgUrl: categoryData[0].img_url,
+          title: categoryData[0].name
+        };
+
+        that.setData({
+          'allCategoryDetail[0].procucts': data,
+          'allCategoryDetail[0].topImgUrl': categoryData[0].img_url,
+          'allCategoryDetail[0].title': categoryData[0].name,
+        });
+
+        that.data.allCategoryDetail[0] = {
+          procucts: data,
           topImgUrl: categoryData[0].img_url,
           title: categoryData[0].name
         };
@@ -44,7 +58,8 @@ Page({
     var index=category.getDataSet(event,'index'),
         id=category.getDataSet(event,'id')//获取data-set
     this.setData({
-      currentMenuIndex:index
+      currentMenuIndex:index,
+      transDown:-100*index,
     });
 
     //如果数据是第一次请求
@@ -65,16 +80,30 @@ Page({
 
   getDataObjForBind:function(index,data){
     var obj={},
-        arr=[0,1,2,3,4,5,6,7],
-        baseData=this.data.categoryTypeArr[index];
-    for(var item in arr){
-      if(item==arr[index]) {
-        obj['categoryInfo' + item]={
-          procucts:data,
-          // topImgUrl: baseData.img.url,
+      baseData = this.data.allCategoryArr[index];
+    for (var i = 0; i < this.data.allCategoryArr.length; i++){
+      // console.log(i);
+      if (i == index){
+        obj['categoryInfo' + i] = {
+          procucts: data,
           topImgUrl: baseData.img_url,
-          title:baseData.name
+          title: baseData.name
         };
+        this.data.allCategoryDetail[i] = {
+          procucts: data,
+          topImgUrl: baseData.img_url,
+          title: baseData.name
+        };
+
+        var setDataPorducts = 'allCategoryDetail[' + i + '].procucts';
+        var setDataTopImgUrl = 'allCategoryDetail[' + i + '].topImgUrl';
+        var setDataTitle = 'allCategoryDetail[' + i + '].title';
+        this.setData({
+          [setDataPorducts]: data,
+          [setDataTopImgUrl]: baseData.img_url,
+          [setDataTitle]: baseData.name
+        });
+
 
         return obj;
       }

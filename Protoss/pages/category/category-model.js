@@ -9,7 +9,7 @@ class Category extends Base {
     }
 
     /*获得所有分类*/
-    getCategoryType(callback) {
+    getAllCategory(callback) {
         var param = {
             url: 'category/all',
             sCallback: function (data) {

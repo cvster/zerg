@@ -20,6 +20,7 @@ use app\lib\exception\OrderException;
 use app\lib\exception\UserException;
 use think\Db;
 use think\Exception;
+use app\lib\exception\TokenException;
 
 /**
  * 订单类
@@ -289,5 +290,64 @@ class Order
                 'd') . substr(time(), -5) . substr(microtime(), 2, 5) . sprintf(
                 '%02d', rand(0, 99));
         return $orderSn;
+    }
+
+
+    /**
+     * 传入订单ID
+     * 检查订单用户id和token相符，即当前订单属于当前用户。不满足则throw ex
+     * 满足则返回订单编号
+     * @return bool
+     * @throws OrderException
+     * @throws TokenException
+     */
+    public static function checkOrderAuth($orderID)
+    {
+        $order = OrderModel::where('id', '=', $orderID)->find();
+        if (!$order)
+        {
+            throw new OrderException();
+        }
+//        $currentUid = Token::getCurrentUid();
+        if(!Token::isTokenCurrentUID($order->user_id))
+        {
+            throw new TokenException(
+                [
+                    'msg' => '订单与用户不匹配',
+                    'errorCode' => 10003
+                ]);
+        }
+    }
+
+    /**
+     * 通过订单id 获取订单编号No
+     * id不存在则throw ex
+     */
+    public static function getOrderNo($orderID)
+    {
+        $order = OrderModel::where('id', '=', $orderID)->find();
+        if (!$order)
+            throw new OrderException();
+
+        return $order->order_no;
+    }
+
+    /**
+     * 检查订单为待支付状态，否则throw ex
+     * @param $orderID
+     */
+    public static function checkOrderUnpaid($orderID)
+    {
+        $order = OrderModel::where('id', '=', $orderID)->find();
+        if (!$order)
+            throw new OrderException();
+
+        if($order->status != 1){
+            throw new OrderException([
+                'msg' => '订单已支付过啦',
+                'errorCode' => 80003,
+                'code' => 400
+            ]);
+        }
     }
 }

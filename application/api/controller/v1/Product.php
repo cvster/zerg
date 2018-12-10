@@ -21,7 +21,7 @@ use think\Exception;
 class Product extends Controller
 {
     protected $beforeActionList = [
-        'checkSuperScope' => ['only' => 'createOne,deleteOne']
+        'checkAdminScope' => ['only' => 'createOne,deleteOne']
     ];
     
     /**

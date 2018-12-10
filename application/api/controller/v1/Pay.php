@@ -18,12 +18,9 @@ use think\Controller;
 
 class Pay extends BaseController
 {
-    protected $beforeActionList = [
-        'checkExclusiveScope' => ['only' => 'getPreOrder']
-    ];
-    
     public function getPreOrder($id='')
     {
+        $this->checkUserScope();
         (new IDMustBePositiveInt()) -> goCheck();
         $pay= new PayService($id);
         return $pay->pay();

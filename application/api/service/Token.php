@@ -36,7 +36,7 @@ class Token
     //验证器验证只是token验证的一种方式
     //另外一种方式是使用行为拦截token，根本不让非法token
     //进入控制器
-    public static function needPrimaryScope()
+    public static function needUserOrAdminScope()
     {
         $scope = self::getCurrentTokenVar('scope');
         if ($scope) {
@@ -52,7 +52,7 @@ class Token
     }
 
     // 用户专有权限
-    public static function needExclusiveScope()
+    public static function needUserScope()
     {
         $scope = self::getCurrentTokenVar('scope');
         if ($scope){
@@ -66,7 +66,7 @@ class Token
         }
     }
 
-    public static function needSuperScope()
+    public static function needAdminScope()
     {
         $scope = self::getCurrentTokenVar('scope');
         if ($scope){
@@ -171,7 +171,7 @@ class Token
      * @throws Exception
      * @throws ParameterException
      */
-    public static function isValidOperate($checkedUID)
+    public static function isTokenCurrentUID($checkedUID)
     {
         if(!$checkedUID){
             throw new Exception('检查UID时必须传入一个被检查的UID');

@@ -20,73 +20,39 @@ Page({
    * 授权登录
    */
   authorLogin: function (e) {
-    let _this = this;
     if (e.detail.errMsg !== 'getUserInfo:ok') {
+      console.log('authorLogin failed')
+      console.log(e.detail.errMsg)
       return false;
     }
+
     wx.showLoading({ title: "正在登录", mask: true });
-    console.log(e);
+    wx.login({
+      success: function () {
+        console.log('login ---------------------------');
+      },
+    })
+
+    this._updateUserInfo(e.detail.rawData);
     wx.setStorageSync('userinfo', e.detail.rawData)
     wx.navigateBack();
-    // 执行微信登录
-    // wx.login({
-    //   success: function (res) {
-    //     // 发送用户信息
-    //     console.log('login success:');
-    //     console.log(res);
-    //     wx.getUserInfo({
-    //       success: function (res) {
-    //         console.log('getUserInfo success:');
-    //         console.log(res);
-    //         // typeof cb == "function" && cb(res.userInfo);
-    //         // //将用户昵称 提交到服务器
-    //         // if (!that.onPay) {
-    //         //   that._updateUserInfo(res.userInfo);
-    //         // }
-
-    //       },
-    //       fail: function (res) {
-    //         console.log('getUserInfo failed ---------------------------');
-    //         console.log(res);
-    //         typeof cb == "function" && cb({
-    //           avatarUrl: '../../imgs/icon/user@default.png',
-    //           nickName: '零食小贩'
-    //         });
-    //       }
-    //     });
-
-        // App._post_form('user/login'
-        //   , {
-        //     code: res.code,
-        //     user_info: e.detail.rawData,
-        //     encrypted_data: e.detail.encryptedData,
-        //     iv: e.detail.iv,
-        //     signature: e.detail.signature
-        //   }
-        //   , function (result) {
-        //     // 记录token user_id
-        //     wx.setStorageSync('token', result.data.token);
-        //     wx.setStorageSync('user_id', result.data.user_id);
-        //     // 跳转回原页面
-        //     _this.navigateBack();
-        //   }
-        //   , false
-        //   , function () {
-        //     wx.hideLoading();
-        //   });
-      // }
-    // });
   },
 
-  /**
-   * 授权成功 跳转回原页面
-   */
-  navigateBack: function () {
-    wx.navigateBack();
-    // let currentPage = wx.getStorageSync('currentPage');
-    // wx.redirectTo({
-    //   url: '/' + currentPage.route + '?' + App.urlEncode(currentPage.options)
-    // });
+
+  /*更新用户信息到服务器*/
+  _updateUserInfo: function (res) {
+    var nickName = res.nickName;
+    delete res.avatarUrl;  //将昵称去除
+    delete res.nickName;  //将昵称去除
+    var allParams = {
+      url: 'user/wx_info',
+      data: { nickname: nickName, extend: JSON.stringify(res) },
+      type: 'post',
+      sCallback: function (data) {
+      }
+    };
+    App.request(allParams);
   },
+
 
 })

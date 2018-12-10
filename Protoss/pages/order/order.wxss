@@ -140,3 +140,10 @@
     background: rgba(171,149,109,0.6);
     pointer-events: auto;
 }
+.cancelOrder{
+    flex-basis: 240rpx;
+    background-color: rgb(160, 158, 155);
+    color: #fff;
+    justify-content: center;
+    border-right:1rpx solid #ccc;
+}

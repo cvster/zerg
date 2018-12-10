@@ -16,18 +16,21 @@ use think\Controller;
 
 class BaseController extends Controller
 {
-    protected function checkExclusiveScope()
+    //用户权限 16
+    protected function checkUserScope()
     {
-        Token::needExclusiveScope();
+        Token::needUserScope();
     }
 
-    protected function checkPrimaryScope()
+    //用户或管理员权限 >=16
+    protected function checkUserOrAdminScope()
     {
-        Token::needPrimaryScope();
+        Token::needUserOrAdminScope();
     }
 
-    protected function checkSuperScope()
+    //管理员权限 32
+    protected function checkAdminScope()
     {
-        Token::needSuperScope();
+        Token::needAdminScope();
     }
 }

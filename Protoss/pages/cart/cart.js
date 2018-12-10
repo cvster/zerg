@@ -1,5 +1,7 @@
 // var CartObj = require('cart-model.js');
 
+let App = getApp();
+
 import {Cart} from 'cart-model.js';
 
 var cart=new Cart(); //实例化 购物车
@@ -21,6 +23,7 @@ Page({
      * 页面重新渲染，包括第一次，和onload方法没有直接关系
      */
     onShow:function(){
+        App.checkLogin();
         var cartData=cart.getCartDataFromLocal(),
             countsInfo=cart.getCartTotalCounts(true);
         this.setData({

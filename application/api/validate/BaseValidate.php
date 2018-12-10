@@ -36,8 +36,7 @@ class BaseValidate extends Validate
     {
         //必须设置contetn-type:application/json
         $request = Request::instance();
-        $params = $request->param();
-        $params=array_merge($params,$arr);//传入的参数一起校验，且传入的参数覆盖request里的参数
+        $params = $request->param();$params=array_merge($params,$arr);//传入的参数一起校验，且传入的参数覆盖request里的参数
         $params['token'] = $request->header('token');
 
         if (!$this->check($params)) {

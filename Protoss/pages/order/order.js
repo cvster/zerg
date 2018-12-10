@@ -1,3 +1,5 @@
+let App = getApp();
+
 import {Order} from '../order/order-model.js';
 import {Cart} from '../cart/cart-model.js';
 import {Address} from '../../utils/address.js';
@@ -44,6 +46,7 @@ Page({
         },
 
         onShow:function(){
+            App.checkLogin();
             if(this.data.id) {
                 var that = this;
                 //下单后，支付成功或者失败后，点左上角返回时能够更新订单状态 所以放在onshow中
@@ -111,12 +114,22 @@ Page({
 
         /*取消订单*/
         cancelOrder: function () {
-          if (this.data.orderStatus == 0) {
-            this._firstTimePay();
-          } else {
-            this._oneMoresTimePay();
-          }
+          var that = this;
+          var allParams = {
+            url: 'order_cancel',
+            type: 'put',
+            data: { id: this.data.id },
+            sCallback: function (data) {
+              wx.setStorageSync('newOrder', true);
+              wx.navigateBack();
+            },
+            eCallback: function () {
+            }
+          };
+          App.request(allParams);
         },
+
+
 
         /*第一次支付*/
         _firstTimePay:function(){
