@@ -70,8 +70,8 @@ class Order extends Base{
             url: 'order/by_user',
             data:{page:pageIndex},
             type:'get',
-            sCallback: function (data) {
-                callback && callback(data);  //1 未支付  2，已支付  3，已发货，4已支付，但库存不足
+            sCallback: function (res) {
+                callback && callback(res);  //1 未支付  2，已支付  3，已发货，4已支付，但库存不足
              }
         };
         this.request(allParams);

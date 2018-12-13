@@ -1,45 +1,20 @@
 
-<view class="container my-container" hidden="{{!loadingHidden}}">
-
-  <view class="my-header" ontap="goToOrders">
-    <image src="{{userInfo.avatarUrl}}"></image>
-    <text class="name">{{userInfo.nickName}}</text>
-  </view>
+<view class="container orders-container" hidden="{{!loadingHidden}}">
 
 
-  <!--地址管理-->
-  <view class="my-address">
+    <view class="header">
+      <view catchtap="bindHeaderTap" class="{{dataType==='all'?'active':''}}" data-type="all">全部订单</view>
+      <view bindtap="bindHeaderTap" class="{{dataType==='payment'?'active':''}}" data-type="payment">待付款</view>
+       <view bindtap="bindHeaderTap" class="{{dataType==='delivery'?'active':''}}" data-type="delivery">待发货</view>
+      <view bindtap="bindHeaderTap" class="{{dataType==='received'?'active':''}}" data-type="received">待收货</view>
+    </view>
 
-    <block wx:if="{{addressInfo}}">
-      <view class="item-title" ontap="editAddress">
-        地址管理
-        <image src="../../imgs/icon/arrow@right.png"></image>
-      </view>
-      <view  class="item-main">
-          <view class="section">
-            <input disabled name="name" placeholder="姓名" value="{{addressInfo.name}}" />
-          </view>
-          <view class="section">
-            <input disabled type="number" name="mobile" placeholder="手机号码" value="{{addressInfo.mobile}}"/>
-          </view>
-          <view class="section">
-            <input disabled name="detail" placeholder="收货地址" value="{{addressInfo.totalDetail}}"/>
-          </view>
-      </view>
-    </block>
-
-    <block wx:else>
-      <view class="add-new-address" ontap="editAddress"><text class="icon">+</text><text>添加地址</text></view>
-    </block>
-
-  </view>
 
   <view class="my-order">
   
         <view class="item-title">我的订单</view>
 
-        <!-- <view class="item-main"> -->
-        <view >
+        <view>
             <block wx:for="{{orderArr}}">
               <view class="order-item" hidden="{{!item.id}}">
                 <view class="order-header" ontap="showOrderDetailInfo" data-id="{{item.id}}">
@@ -67,6 +42,7 @@
               </view>
             </block>
         </view>
+        
   </view>
 
 </view>

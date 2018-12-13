@@ -35,10 +35,10 @@ Page({
       }
 
       //更新订单,相当自动下拉刷新,只有  非第一次打开 “我的”页面，且有新的订单时 才调用。
-      var newOrderFlag = order.hasNewOrder();
-      if (this.data.loadingHidden && newOrderFlag) {
-        this.onPullDownRefresh();
-      }
+      // var newOrderFlag = order.hasNewOrder();
+      // if (this.data.loadingHidden && newOrderFlag) {
+      //   this.onPullDownRefresh();
+      // }
       console.log('onShow End');
     },
 
@@ -227,5 +227,11 @@ Page({
     App.request(allParams);
 
   },
+
+  goToOrders: function(){
+    wx.navigateTo({
+      url: '../orders/orders'
+    });
+  }
 
 })

@@ -56,7 +56,7 @@ class Product extends BaseAdminController
     {
         $categoryModel = new CategoryModel();
         $categories =$categoryModel->getAllCategories();
-        $product = ['name'=>'','id'=>-1,'price'=>'','stock'=>'',
+        $product = ['name'=>'','id'=>-1,'price'=>'','stock'=>'','category_id'=>-1,
             'main_img_url'=>'/static/images/chooseImage2.jpg'];//id = -1 表示新增，这里imgUrl是一个‘请添加图片的图’，实际还需要上传图片
         return $this->fetch('product/edit',['product'=>$product, 'categories'=>$categories, 'imgs'=>[]]);
     }
